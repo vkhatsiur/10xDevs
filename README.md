@@ -28,15 +28,17 @@ Import text, notes, or documents → AI generates flashcards → Review and stud
 - ✅ Generation history
 - ✅ Responsive design
 
-## 🏗️ Project Structure
+## 🧞 Commands
 
-```
-src/
-├── PRD.md              # Product Requirements Document
-├── README.md           # This file
-├── .gitignore          # Git ignore rules
-└── (project files TBD)
-```
+All commands are run from the root of the project:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 
 ## 📖 Documentation
 
@@ -50,6 +52,7 @@ This project is built as part of the **10xDevs** course (Module 2) - AI-First MV
 
 - [10xRules.ai Prompt Library](https://10xrules.ai/prompts)
 - [Course Platform](https://bravecourses.circle.so)
+- [Astro Docs](https://docs.astro.build)
 
 ## 📝 License
 

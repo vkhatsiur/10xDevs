@@ -351,7 +351,7 @@ Delete flashcard
 
 ## 14. Next Steps After MVP
 
-### Version 2.0 Features (Post-certification)
+### Version 2.0 Features
 - Supabase Auth integration
 - Spaced repetition algorithm
 - Progress tracking and analytics
@@ -371,12 +371,6 @@ Delete flashcard
 - OpenRouter Docs: https://openrouter.ai/docs
 - Shadcn/ui: https://ui.shadcn.com
 - Astro Docs: https://astro.build
-
-### Certification Requirements
-- ✅ New GitHub repository
-- ✅ PRD document (this file)
-- ✅ Basic data management (CRUD)
-- ✅ AI integration via OpenRouter
 
 ---
 
