@@ -2,6 +2,9 @@ import type { APIRoute } from 'astro';
 import { GenerationService } from '../../../lib/services/generation.service';
 import { generateFlashcardsSchema } from '../../../lib/validators/generation.validator';
 
+// Mark as server-rendered (required for POST endpoints in Astro)
+export const prerender = false;
+
 const generationService = new GenerationService();
 
 // POST /api/generations - Generate flashcard proposals from source text

@@ -2,6 +2,9 @@ import type { APIRoute } from 'astro';
 import { FlashcardService } from '../../../lib/services/flashcard.service';
 import { flashcardsCreateSchema } from '../../../lib/validators/flashcard.validator';
 
+// Mark as server-rendered (required for POST endpoints in Astro)
+export const prerender = false;
+
 const flashcardService = new FlashcardService();
 
 // GET /api/flashcards - Get all flashcards for a user

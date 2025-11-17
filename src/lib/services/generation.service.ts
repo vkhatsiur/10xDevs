@@ -15,10 +15,15 @@ export interface GenerationResult {
 export class GenerationService {
   private supabase = getServiceSupabase();
   private openRouterService: OpenRouterService;
-  private model = 'openai/gpt-4o-mini';
+  // Using free model (20 req/min, 200 req/day limit)
+  // Trying different free models due to rate limits
+  private model = 'deepseek/deepseek-chat-v3.1:free';
 
   constructor() {
-    this.openRouterService = new OpenRouterService();
+    // Pass free model to OpenRouter service
+    this.openRouterService = new OpenRouterService({
+      model: this.model,
+    });
   }
 
   /**
