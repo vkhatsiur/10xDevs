@@ -16,19 +16,7 @@ CREATE TABLE users (
     confirmed_at timestamptz
 );
 
--- Flashcards table
-CREATE TABLE flashcards (
-    id bigserial PRIMARY KEY,
-    front varchar(200) NOT NULL,
-    back varchar(500) NOT NULL,
-    source varchar NOT NULL CHECK (source IN ('ai-full', 'ai-edited', 'manual')),
-    created_at timestamptz NOT NULL DEFAULT now(),
-    updated_at timestamptz NOT NULL DEFAULT now(),
-    generation_id bigint REFERENCES generations(id) ON DELETE SET NULL,
-    user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Generations table
+-- Generations table (must be created before flashcards)
 CREATE TABLE generations (
     id bigserial PRIMARY KEY,
     user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -41,6 +29,18 @@ CREATE TABLE generations (
     generation_duration integer NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Flashcards table (references generations)
+CREATE TABLE flashcards (
+    id bigserial PRIMARY KEY,
+    front varchar(200) NOT NULL,
+    back varchar(500) NOT NULL,
+    source varchar NOT NULL CHECK (source IN ('ai-full', 'ai-edited', 'manual')),
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    generation_id bigint REFERENCES generations(id) ON DELETE SET NULL,
+    user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Generation error logs table
