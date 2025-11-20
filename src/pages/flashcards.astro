@@ -1,0 +1,23 @@
+---
+/**
+ * My Flashcards Page
+ * View, search, edit, and delete saved flashcards
+ */
+import Layout from '../layouts/Layout.astro';
+import { FlashcardList } from '../components/flashcards/FlashcardList';
+---
+
+<Layout title="My Flashcards - 10xCards">
+  <main class="container mx-auto py-8 px-4 max-w-7xl">
+    {/* Header */}
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">My Flashcards</h1>
+      <p class="text-muted-foreground">
+        View, search, and manage your saved flashcards
+      </p>
+    </div>
+
+    {/* Flashcard List */}
+    <FlashcardList client:load />
+  </main>
+</Layout>

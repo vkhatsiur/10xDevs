@@ -8,13 +8,20 @@ export const prerender = false;
 const flashcardService = new FlashcardService();
 
 // GET /api/flashcards - Get all flashcards for a user
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ locals }) => {
   try {
-    // For MVP, we'll use the test user ID
-    // In Module 3, this will come from authentication
-    const testUserId = '00000000-0000-0000-0000-000000000001';
+    // Check authentication
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
-    const flashcards = await flashcardService.getFlashcards(testUserId);
+    const flashcards = await flashcardService.getFlashcards(locals.user.id);
 
     return new Response(
       JSON.stringify({
@@ -43,8 +50,19 @@ export const GET: APIRoute = async () => {
 };
 
 // POST /api/flashcards - Create one or more flashcards
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    // Check authentication
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     // Parse request body
     const body = await request.json();
 
@@ -64,16 +82,12 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // For MVP, we'll use the test user ID
-    // In Module 3, this will come from authentication
-    const testUserId = '00000000-0000-0000-0000-000000000001';
-
     // Verify generation ownership for AI sources
     for (const flashcard of validation.data.flashcards) {
       if (flashcard.generation_id !== null) {
         const isOwner = await flashcardService.verifyGenerationOwnership(
           flashcard.generation_id,
-          testUserId
+          locals.user.id
         );
 
         if (!isOwner) {
@@ -94,7 +108,7 @@ export const POST: APIRoute = async ({ request }) => {
     // Create flashcards
     const createdFlashcards = await flashcardService.createFlashcards(
       validation.data.flashcards,
-      testUserId
+      locals.user.id
     );
 
     return new Response(

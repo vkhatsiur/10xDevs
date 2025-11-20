@@ -1,0 +1,63 @@
+%% User Journey Map for 10xCards Authentication
+%% Visualizes the complete user experience from first visit to active usage
+
+journey
+    title 10xCards User Journey - From First Visit to Active User
+
+    section First Visit
+      Visit landing page: 3: Guest
+      Click "Get Started": 4: Guest
+      Redirected to Login: 3: Guest
+      See "Don't have account?": 4: Guest
+
+    section Registration
+      Click "Register": 5: New User
+      Enter email: 4: New User
+      Enter password: 4: New User
+      Confirm password: 4: New User
+      Submit registration: 5: New User
+      Check email inbox: 3: New User
+      Click confirmation link: 4: New User
+      See "Account confirmed": 5: New User
+
+    section First Login
+      Go to login page: 5: User
+      Enter credentials: 4: User
+      Submit login: 5: User
+      Session created: 5: User
+      Redirected to /generate: 5: User
+      See welcome message: 5: User
+
+    section Using the App
+      Paste study text: 5: User
+      Click "Generate": 5: User
+      AI processes text: 4: User
+      Review flashcard proposals: 5: User
+      Edit some cards: 4: User
+      Accept cards: 5: User
+      Save flashcards: 5: User
+      See success message: 5: User
+
+    section Return Visit
+      Open app next day: 5: Returning User
+      Still logged in: 5: Returning User
+      Go to /generate: 5: Returning User
+      Generate more cards: 5: Returning User
+      View saved cards: 5: Returning User
+
+    section Logout
+      Click logout button: 4: User
+      Session cleared: 5: User
+      Redirected to login: 4: User
+      Cannot access /generate: 5: User
+      Must login again: 4: User
+
+    section Error Recovery
+      Forgot password: 3: User
+      Click "Reset Password": 4: User
+      Enter email: 4: User
+      Check email: 3: User
+      Click reset link: 4: User
+      Enter new password: 4: User
+      Password updated: 5: User
+      Login successful: 5: User

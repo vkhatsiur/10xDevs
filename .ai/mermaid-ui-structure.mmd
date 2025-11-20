@@ -1,0 +1,86 @@
+%% UI Structure Diagram for 10xCards with Authentication
+%% Shows page hierarchy and navigation flow
+
+graph TB
+    subgraph "Public Pages (No Auth Required)"
+        Landing[🏠 Landing Page<br/>/]
+        Login[🔐 Login Page<br/>/login]
+        Register[📝 Register Page<br/>/register]
+        ResetPwd[🔑 Reset Password<br/>/reset-password]
+    end
+
+    subgraph "Protected Pages (Auth Required)"
+        Generate[⚡ Generate Flashcards<br/>/generate]
+        Flashcards[📚 My Flashcards<br/>/flashcards]
+        Profile[👤 User Profile<br/>/profile]
+    end
+
+    subgraph "Main Layout Components"
+        Nav[Navigation Bar]
+        Footer[Footer]
+    end
+
+    subgraph "Auth Components"
+        LoginForm[LoginForm Component<br/>Email + Password]
+        RegisterForm[RegisterForm Component<br/>Email + Password + Confirm]
+        AuthGuard[Auth Middleware<br/>Verify JWT]
+        LogoutBtn[Logout Button]
+    end
+
+    subgraph "Flashcard Components"
+        TextInput[TextInputArea<br/>1000-10000 chars]
+        ProposalsList[FlashcardProposalsList<br/>AI generated cards]
+        SaveBtn[BulkSaveButtons<br/>Save all/accepted]
+    end
+
+    %% Navigation Flow
+    Landing -->|Click Login| Login
+    Landing -->|Click Register| Register
+    Login -->|Has account?| LoginForm
+    Login -->|No account?| Register
+    Register -->|Has account?| Login
+    Register -->|Submit| RegisterForm
+
+    LoginForm -->|Success| AuthGuard
+    RegisterForm -->|Success| Login
+    AuthGuard -->|Valid Token| Generate
+    AuthGuard -->|Invalid| Login
+
+    %% Protected Pages Navigation
+    Generate -->|Nav Link| Flashcards
+    Flashcards -->|Nav Link| Generate
+    Generate -->|Nav Link| Profile
+    Profile -->|Nav Link| Generate
+
+    %% Layout Integration
+    Nav -.->|Included in| Generate
+    Nav -.->|Included in| Flashcards
+    Nav -.->|Included in| Profile
+    Footer -.->|Included in| Generate
+    Footer -.->|Included in| Flashcards
+
+    %% Auth Actions
+    Nav -->|When logged in| LogoutBtn
+    LogoutBtn -->|Click| Login
+
+    %% Component Integration
+    Generate -->|Contains| TextInput
+    Generate -->|Contains| ProposalsList
+    Generate -->|Contains| SaveBtn
+
+    %% Password Reset Flow
+    Login -->|Forgot password?| ResetPwd
+    ResetPwd -->|Success| Login
+
+    %% Styling
+    classDef publicPage fill:#93C5FD,stroke:#3B82F6,stroke-width:2px,color:#1E3A8A
+    classDef protectedPage fill:#86EFAC,stroke:#22C55E,stroke-width:3px,color:#14532D
+    classDef authComp fill:#FDE047,stroke:#EAB308,stroke-width:2px,color:#713F12
+    classDef flashcardComp fill:#C084FC,stroke:#9333EA,stroke-width:2px,color:#4C1D95
+    classDef layoutComp fill:#CBD5E1,stroke:#64748B,stroke-width:2px,color:#1E293B
+
+    class Landing,Login,Register,ResetPwd publicPage
+    class Generate,Flashcards,Profile protectedPage
+    class LoginForm,RegisterForm,AuthGuard,LogoutBtn authComp
+    class TextInput,ProposalsList,SaveBtn flashcardComp
+    class Nav,Footer layoutComp

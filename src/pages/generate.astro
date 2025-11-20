@@ -1,31 +1,8 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import { FlashcardGenerator } from '@/components/flashcards/FlashcardGenerator';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generate Flashcards - 10xCards</title>
-    <link rel="stylesheet" href="/src/styles/global.css" />
-  </head>
-  <body>
-    <FlashcardGenerator client:load />
-
-    <!-- Toaster for notifications -->
-    <div id="toaster-root"></div>
-
-    <script>
-      import { Toaster } from 'sonner';
-      import { createRoot } from 'react-dom/client';
-      import { createElement } from 'react';
-
-      const toasterRoot = document.getElementById('toaster-root');
-      if (toasterRoot) {
-        const root = createRoot(toasterRoot);
-        root.render(createElement(Toaster, { richColors: true, position: 'top-right' }));
-      }
-    </script>
-  </body>
-</html>
+<Layout title="Generate Flashcards - 10xCards">
+  <FlashcardGenerator client:load />
+</Layout>

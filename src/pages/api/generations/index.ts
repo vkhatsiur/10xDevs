@@ -10,8 +10,19 @@ const generationService = new GenerationService();
 // POST /api/generations - Generate flashcard proposals from source text
 // IMPORTANT: This endpoint returns proposals WITHOUT saving them to flashcards table
 // Users must accept proposals and save them via POST /api/flashcards
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    // Check authentication
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     // Parse request body
     const body = await request.json();
 
@@ -37,14 +48,10 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // For MVP, we'll use the test user ID
-    // In Module 3, this will come from authentication
-    const testUserId = '00000000-0000-0000-0000-000000000001';
-
-    // Generate flashcard proposals
+    // Generate flashcard proposals with authenticated user
     const result = await generationService.generateFlashcards(
       validation.data.source_text,
-      testUserId
+      locals.user.id
     );
 
     return new Response(JSON.stringify(result), {

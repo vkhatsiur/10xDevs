@@ -1,0 +1,23 @@
+---
+/**
+ * Registration Page
+ * Allows users to create a new account
+ */
+import Layout from '../layouts/Layout.astro';
+import { RegisterForm } from '../components/auth/RegisterForm';
+---
+
+<Layout title="Sign up - 10xCards">
+  <main class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div class="w-full max-w-md">
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-900">Create account</h1>
+          <p class="text-gray-600 mt-2">Start creating flashcards with AI</p>
+        </div>
+
+        <RegisterForm client:load />
+      </div>
+    </div>
+  </main>
+</Layout>

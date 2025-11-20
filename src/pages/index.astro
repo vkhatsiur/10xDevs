@@ -1,16 +1,30 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="10xCards - AI-Powered Flashcards">
+	<main class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+		<div class="max-w-4xl mx-auto px-4 py-16 text-center">
+			<h1 class="text-5xl font-bold text-gray-900 mb-6">
+				Learn Smarter with AI-Powered Flashcards
+			</h1>
+			<p class="text-xl text-gray-600 mb-8">
+				Transform any text into interactive flashcards using advanced AI technology.
+			</p>
+			<div class="flex gap-4 justify-center">
+				<a
+					href="/register"
+					class="px-8 py-3 bg-blue-600 text-white rounded-lg text-lg font-medium hover:bg-blue-700 transition-colors"
+				>
+					Get Started
+				</a>
+				<a
+					href="/login"
+					class="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg text-lg font-medium hover:bg-blue-50 transition-colors"
+				>
+					Log in
+				</a>
+			</div>
+		</div>
+	</main>
+</Layout>

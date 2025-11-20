@@ -1,0 +1,23 @@
+---
+/**
+ * Login Page
+ * Allows users to authenticate with email/password
+ */
+import Layout from '../layouts/Layout.astro';
+import { LoginForm } from '../components/auth/LoginForm';
+---
+
+<Layout title="Log in - 10xCards">
+  <main class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div class="w-full max-w-md">
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-900">Welcome back</h1>
+          <p class="text-gray-600 mt-2">Log in to your 10xCards account</p>
+        </div>
+
+        <LoginForm client:load />
+      </div>
+    </div>
+  </main>
+</Layout>

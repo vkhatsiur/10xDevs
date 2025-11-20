@@ -1,0 +1,64 @@
+%% Authentication Flow Diagram for 10xCards
+%% Shows the complete login/registration flow with Supabase Auth
+
+flowchart TD
+    Start([User Opens App]) --> CheckAuth{Authenticated?}
+
+    CheckAuth -->|No| LoginPage[/Login Page/]
+    CheckAuth -->|Yes| Generate[/Generate Page/]
+
+    LoginPage --> HasAccount{Has Account?}
+    HasAccount -->|Yes| LoginForm[Login Form]
+    HasAccount -->|No| RegisterLink[Click Register Link]
+
+    LoginForm --> InputEmail[Enter Email & Password]
+    InputEmail --> SubmitLogin[Submit Login]
+
+    SubmitLogin --> ValidateLogin{Valid Credentials?}
+    ValidateLogin -->|No| ShowError[Show Error Message]
+    ShowError --> LoginForm
+    ValidateLogin -->|Yes| CreateSession[Create Session]
+
+    CreateSession --> SetCookie[Set JWT Cookie]
+    SetCookie --> RedirectGenerate[Redirect to /generate]
+    RedirectGenerate --> Generate
+
+    RegisterLink --> RegisterPage[/Register Page/]
+    RegisterPage --> RegisterForm[Registration Form]
+    RegisterForm --> InputRegister[Enter Email, Password, Confirm]
+
+    InputRegister --> ValidateRegister{Valid Input?}
+    ValidateRegister -->|No| ShowRegError[Show Validation Error]
+    ShowRegError --> RegisterForm
+    ValidateRegister -->|Yes| CreateAccount[Create Account in Supabase]
+
+    CreateAccount --> SendEmail[Send Confirmation Email]
+    SendEmail --> RedirectLogin[Redirect to Login]
+    RedirectLogin --> LoginPage
+
+    Generate --> UseApp[Use Application Features]
+    UseApp --> Logout{Click Logout?}
+    Logout -->|Yes| ClearSession[Clear Session & Cookie]
+    ClearSession --> RedirectLogout[Redirect to Login]
+    RedirectLogout --> LoginPage
+    Logout -->|No| UseApp
+
+    %% Middleware Protection
+    Generate -.->|Check on every request| Middleware[Middleware: Verify JWT]
+    Middleware -->|Invalid/Expired| ForceLogout[Force Logout]
+    ForceLogout --> LoginPage
+    Middleware -->|Valid| Continue[Continue to Page]
+    Continue --> Generate
+
+    %% Styling
+    classDef processClass fill:#4F46E5,stroke:#4338CA,stroke-width:2px,color:#fff
+    classDef decisionClass fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#fff
+    classDef pageClass fill:#10B981,stroke:#059669,stroke-width:2px,color:#fff
+    classDef errorClass fill:#EF4444,stroke:#DC2626,stroke-width:2px,color:#fff
+    classDef supabaseClass fill:#3ECF8E,stroke:#2DA771,stroke-width:3px,color:#fff
+
+    class LoginForm,RegisterForm,InputEmail,InputRegister,SubmitLogin processClass
+    class CheckAuth,HasAccount,ValidateLogin,ValidateRegister,Logout decisionClass
+    class LoginPage,RegisterPage,Generate pageClass
+    class ShowError,ShowRegError,ForceLogout errorClass
+    class CreateSession,SetCookie,CreateAccount,SendEmail,ClearSession,Middleware supabaseClass

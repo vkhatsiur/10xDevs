@@ -1,0 +1,132 @@
+---
+/**
+ * Main Layout Component
+ * Provides consistent structure and navigation across all pages
+ */
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const user = Astro.locals.user;
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo/Brand -->
+          <div class="flex items-center">
+            <a href="/" class="text-2xl font-bold text-blue-600">
+              10xCards
+            </a>
+          </div>
+
+          <!-- Navigation Links -->
+          <div class="flex items-center space-x-4">
+            {user ? (
+              <>
+                <a
+                  href="/generate"
+                  class={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    currentPath === '/generate'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Generate
+                </a>
+                <a
+                  href="/flashcards"
+                  class={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    currentPath === '/flashcards'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  My Flashcards
+                </a>
+                <span class="text-sm text-gray-600">
+                  {user.email}
+                </span>
+                <button
+                  id="logout-button"
+                  class="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 transition-colors"
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md text-sm font-medium transition-colors"
+                >
+                  Log in
+                </a>
+                <a
+                  href="/register"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Sign up
+                </a>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <slot />
+
+    <!-- Logout functionality -->
+    {user && (
+      <script>
+        const logoutButton = document.getElementById('logout-button');
+        if (logoutButton) {
+          logoutButton.addEventListener('click', async () => {
+            try {
+              const response = await fetch('/api/auth/logout', {
+                method: 'POST',
+              });
+
+              if (response.ok) {
+                window.location.href = '/login';
+              } else {
+                alert('Logout failed. Please try again.');
+              }
+            } catch (error) {
+              console.error('Logout error:', error);
+              alert('Logout failed. Please try again.');
+            }
+          });
+        }
+      </script>
+    )}
+
+    <!-- Toaster for notifications -->
+    <div id="toaster-root"></div>
+    <script>
+      import { Toaster } from 'sonner';
+      import { createRoot } from 'react-dom/client';
+      import { createElement } from 'react';
+
+      const toasterRoot = document.getElementById('toaster-root');
+      if (toasterRoot) {
+        const root = createRoot(toasterRoot);
+        root.render(createElement(Toaster, { richColors: true, position: 'top-right' }));
+      }
+    </script>
+  </body>
+</html>
