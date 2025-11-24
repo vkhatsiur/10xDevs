@@ -32,12 +32,13 @@ export function FlashcardItem({ flashcard, onEdit, onDelete }: FlashcardItemProp
   const badge = getSourceBadge(flashcard.source);
 
   return (
-    <div className="relative group">
+    <div className="relative group" data-testid={`flashcard-item-${flashcard.id}`}>
       {/* Flashcard Container */}
       <div
         className="relative h-64 cursor-pointer"
         onClick={handleFlip}
         style={{ perspective: '1000px' }}
+        data-testid={`flashcard-card-${flashcard.id}`}
       >
         {/* Flip Container */}
         <div
@@ -122,6 +123,7 @@ export function FlashcardItem({ flashcard, onEdit, onDelete }: FlashcardItemProp
           variant="outline"
           size="sm"
           className="flex-1"
+          data-testid={`edit-flashcard-${flashcard.id}`}
         >
           <Pencil className="h-4 w-4 mr-1" />
           Edit
@@ -134,6 +136,7 @@ export function FlashcardItem({ flashcard, onEdit, onDelete }: FlashcardItemProp
           variant="outline"
           size="sm"
           className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+          data-testid={`delete-flashcard-${flashcard.id}`}
         >
           <Trash2 className="h-4 w-4 mr-1" />
           Delete

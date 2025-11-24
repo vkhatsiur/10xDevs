@@ -101,7 +101,7 @@ export function ManualFlashcardForm() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="manual-flashcard-form">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">Create Flashcards Manually</h2>
@@ -109,7 +109,7 @@ export function ManualFlashcardForm() {
             Add your own flashcards without AI generation
           </p>
         </div>
-        <Button onClick={addCard} variant="outline" size="sm">
+        <Button onClick={addCard} variant="outline" size="sm" data-testid="add-card-button">
           <Plus className="mr-2 h-4 w-4" />
           Add Card
         </Button>
@@ -120,6 +120,7 @@ export function ManualFlashcardForm() {
           <div
             key={card.id}
             className="p-4 border border-gray-200 rounded-lg space-y-4 bg-white"
+            data-testid={`flashcard-${index}`}
           >
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-500">
@@ -131,6 +132,7 @@ export function ManualFlashcardForm() {
                   variant="ghost"
                   size="sm"
                   className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  data-testid={`remove-card-${index}`}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -149,6 +151,7 @@ export function ManualFlashcardForm() {
                 onChange={(e) => updateCard(card.id, 'front', e.target.value)}
                 maxLength={200}
                 disabled={isSaving}
+                data-testid={`flashcard-front-${index}`}
               />
               <p className="text-xs text-gray-500">
                 {card.front.length}/200 characters
@@ -168,6 +171,7 @@ export function ManualFlashcardForm() {
                 disabled={isSaving}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed resize-y"
+                data-testid={`flashcard-back-${index}`}
               />
               <p className="text-xs text-gray-500">
                 {card.back.length}/500 characters
@@ -183,6 +187,7 @@ export function ManualFlashcardForm() {
           disabled={!hasValidCards || isSaving}
           size="lg"
           className="flex-1"
+          data-testid="save-flashcards-button"
         >
           <Save className="mr-2 h-5 w-5" />
           {isSaving ? 'Saving...' : `Save ${cards.length} Flashcard${cards.length > 1 ? 's' : ''}`}

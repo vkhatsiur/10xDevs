@@ -18,12 +18,16 @@ export function LoginForm() {
     setError('');
     setIsLoading(true);
 
+    console.log('Login attempt:', { email, password: password ? '***' : 'EMPTY' });
+
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
+
+      console.log('Login response:', response.status);
 
       const data = await response.json();
 
@@ -42,7 +46,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6" data-testid="login-form">
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -53,6 +57,7 @@ export function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={isLoading}
+          data-testid="login-email-input"
         />
       </div>
 
@@ -66,22 +71,23 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={isLoading}
+          data-testid="login-password-input"
         />
       </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md" data-testid="login-error-message">
           {error}
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading} data-testid="login-submit-button">
         {isLoading ? 'Logging in...' : 'Log in'}
       </Button>
 
       <p className="text-sm text-center text-gray-600">
         Don't have an account?{' '}
-        <a href="/register" className="text-blue-600 hover:underline">
+        <a href="/register" className="text-blue-600 hover:underline" data-testid="login-register-link">
           Sign up
         </a>
       </p>

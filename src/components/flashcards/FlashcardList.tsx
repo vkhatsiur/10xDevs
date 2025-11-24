@@ -142,7 +142,7 @@ export function FlashcardList() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="flex items-center justify-center py-12" data-testid="flashcard-list-loading">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading flashcards...</p>
@@ -153,7 +153,7 @@ export function FlashcardList() {
 
   if (flashcards.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12" data-testid="flashcard-list-empty">
         <div className="max-w-md mx-auto">
           <div className="text-6xl mb-4">📚</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">No flashcards yet</h2>
@@ -163,6 +163,7 @@ export function FlashcardList() {
           <Button
             onClick={() => window.location.href = '/generate'}
             size="lg"
+            data-testid="create-first-flashcard-button"
           >
             <Plus className="mr-2 h-5 w-5" />
             Create Flashcards
@@ -173,7 +174,7 @@ export function FlashcardList() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="flashcard-list">
       {/* Search Bar */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -183,12 +184,13 @@ export function FlashcardList() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
+          data-testid="flashcard-search-input"
         />
       </div>
 
       {/* Stats */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600" data-testid="flashcard-count">
           {filteredFlashcards.length === flashcards.length
             ? `${flashcards.length} flashcard${flashcards.length === 1 ? '' : 's'}`
             : `${filteredFlashcards.length} of ${flashcards.length} flashcards`}
@@ -197,6 +199,7 @@ export function FlashcardList() {
           onClick={() => window.location.href = '/generate'}
           variant="outline"
           size="sm"
+          data-testid="add-more-flashcards-button"
         >
           <Plus className="mr-2 h-4 w-4" />
           Add More
@@ -205,11 +208,11 @@ export function FlashcardList() {
 
       {/* Flashcards Grid */}
       {filteredFlashcards.length === 0 ? (
-        <div className="text-center py-12">
+        <div className="text-center py-12" data-testid="no-search-results">
           <p className="text-gray-600">No flashcards match your search</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="flashcard-grid">
           {filteredFlashcards.map((flashcard) => (
             <FlashcardItem
               key={flashcard.id}
@@ -223,7 +226,7 @@ export function FlashcardList() {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingFlashcard} onOpenChange={(open) => !open && setEditingFlashcard(null)}>
-        <DialogContent>
+        <DialogContent data-testid="edit-flashcard-dialog">
           <DialogHeader>
             <DialogTitle>Edit Flashcard</DialogTitle>
             <DialogDescription>
@@ -240,6 +243,7 @@ export function FlashcardList() {
                 onChange={(e) => setEditFront(e.target.value)}
                 maxLength={200}
                 placeholder="Question or term"
+                data-testid="edit-flashcard-front-input"
               />
               <p className="text-xs text-gray-500">{editFront.length}/200 characters</p>
             </div>
@@ -254,6 +258,7 @@ export function FlashcardList() {
                 placeholder="Answer or definition"
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+                data-testid="edit-flashcard-back-input"
               />
               <p className="text-xs text-gray-500">{editBack.length}/500 characters</p>
             </div>
@@ -264,10 +269,11 @@ export function FlashcardList() {
               variant="outline"
               onClick={() => setEditingFlashcard(null)}
               disabled={isSaving}
+              data-testid="edit-flashcard-cancel-button"
             >
               Cancel
             </Button>
-            <Button onClick={handleSaveEdit} disabled={isSaving}>
+            <Button onClick={handleSaveEdit} disabled={isSaving} data-testid="edit-flashcard-save-button">
               {isSaving ? 'Saving...' : 'Save Changes'}
             </Button>
           </DialogFooter>
