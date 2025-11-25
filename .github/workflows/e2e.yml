@@ -1,0 +1,69 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  e2e:
+    name: Playwright E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Create .env.test file
+        run: |
+          cat > .env.test << EOF
+          # Supabase Configuration (Cloud - E2E Testing)
+          PUBLIC_SUPABASE_URL=${{ secrets.E2E_SUPABASE_URL }}
+          PUBLIC_SUPABASE_ANON_KEY=${{ secrets.E2E_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY=${{ secrets.E2E_SUPABASE_SERVICE_KEY }}
+
+          # OpenRouter API Configuration
+          OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}
+
+          # E2E Test User Credentials
+          E2E_TEST_EMAIL=${{ secrets.E2E_TEST_EMAIL }}
+          E2E_TEST_PASSWORD=${{ secrets.E2E_TEST_PASSWORD }}
+          EOF
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Cleanup test data
+        if: always()
+        run: npm run test:e2e:teardown
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-videos
+          path: test-results/
+          retention-days: 7

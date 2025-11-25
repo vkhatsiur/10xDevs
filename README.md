@@ -27,6 +27,40 @@ Import text, notes, or documents → AI generates flashcards → Review and stud
 - ✅ View, edit, and delete cards
 - ✅ Generation history
 - ✅ Responsive design
+- ✅ User authentication (Supabase Auth)
+- ✅ Unit tests (Vitest)
+- ✅ E2E tests (Playwright)
+- ✅ CI/CD (GitHub Actions)
+
+## 🧪 Testing
+
+### Unit Tests
+```bash
+npm run test              # Run unit tests
+npm run test:watch        # Run in watch mode
+npm run test:ui           # Run with UI
+npm run test:coverage     # Run with coverage report
+```
+
+### E2E Tests
+```bash
+npm run test:e2e          # Run E2E tests
+npm run test:e2e:ui       # Run with Playwright UI
+npm run test:e2e:headed   # Run with visible browser
+npm run test:e2e:debug    # Run in debug mode
+npm run test:e2e:report   # View test report
+npm run test:e2e:teardown # Clean up test data
+```
+
+See [tests/README.md](./tests/README.md) for detailed E2E testing documentation.
+
+### CI/CD
+
+Automated workflows run on every push:
+- **CI**: Linting, type checking, unit tests, build verification
+- **E2E**: Playwright tests on cloud Supabase
+
+See [.github/SETUP.md](./.github/SETUP.md) for GitHub Actions configuration.
 
 ## 🧞 Commands
 
