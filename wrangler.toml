@@ -1,0 +1,13 @@
+# Cloudflare Workers configuration for 10xCards
+name = "10xcards"
+compatibility_date = "2024-01-01"
+
+# Pages-specific configuration
+pages_build_output_dir = "dist"
+
+[env.production]
+# Production environment variables are set in Cloudflare Dashboard
+# Settings → Environment variables
+
+[env.preview]
+# Preview environment variables

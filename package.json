@@ -54,6 +54,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@astrojs/cloudflare": "^12.6.11",
     "@playwright/test": "^1.56.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",

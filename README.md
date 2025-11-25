@@ -31,6 +31,7 @@ Import text, notes, or documents → AI generates flashcards → Review and stud
 - ✅ Unit tests (Vitest)
 - ✅ E2E tests (Playwright)
 - ✅ CI/CD (GitHub Actions)
+- ✅ Production deployment (Cloudflare Pages)
 
 ## 🧪 Testing
 
@@ -77,6 +78,29 @@ All commands are run from the root of the project:
 ## 📖 Documentation
 
 - [Product Requirements Document](./PRD.md)
+- [Production Deployment Guide](./docs/DEPLOYMENT.md)
+- [Production Supabase Setup](./docs/PRODUCTION_SUPABASE.md)
+- [Deployment Checklist](./docs/DEPLOYMENT_CHECKLIST.md)
+
+## 🚀 Deployment
+
+This project is configured for deployment on **Cloudflare Pages**.
+
+### Quick Deploy
+
+1. Push code to GitHub
+2. Connect repository to Cloudflare Pages
+3. Configure environment variables
+4. Deploy!
+
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for complete deployment instructions.
+
+### Production Environment
+
+- **Platform**: Cloudflare Pages
+- **Database**: Supabase (Cloud)
+- **CDN**: Cloudflare CDN (global)
+- **SSL**: Automatic via Cloudflare
 
 ## 🎓 Course Context
 
