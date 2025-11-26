@@ -18,7 +18,7 @@ export class OpenRouterService {
 
   constructor(config?: OpenRouterConfig) {
     this.apiUrl = config?.apiUrl || 'https://openrouter.ai/api/v1/chat/completions';
-    this.model = config?.model || 'openai/gpt-4o-mini';
+    this.model = config?.model || 'openai/gpt-4.1-mini';
     this.timeout = config?.timeout || 60000; // 60 seconds
     this.maxRetries = config?.maxRetries || 2;
 
