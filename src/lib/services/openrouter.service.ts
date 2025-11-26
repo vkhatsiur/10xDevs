@@ -214,7 +214,7 @@ ${sourceText}`;
     let proposals: FlashcardProposal[];
     try {
       proposals = JSON.parse(jsonContent);
-    } catch (_error) {
+    } catch {
       throw new InvalidResponseError(
         `Failed to parse AI response as JSON`,
         jsonContent.substring(0, 200)
