@@ -62,7 +62,7 @@ export class FlashcardsPage {
     const deleteButton = this.page.getByTestId(`delete-flashcard-${id}`);
 
     // Handle browser confirmation dialog
-    this.page.once('dialog', dialog => dialog.accept());
+    this.page.once('dialog', (dialog) => dialog.accept());
     await deleteButton.click();
   }
 
@@ -116,7 +116,7 @@ export class FlashcardsPage {
       await this.expectSuccessToast().catch(() => {});
       await this.page.waitForTimeout(400);
     }
-    
+
     await expect(deleteButtons).toHaveCount(0);
   }
 }

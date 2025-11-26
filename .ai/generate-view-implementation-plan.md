@@ -1,12 +1,15 @@
 # Flashcard Generation View Implementation Plan
 
 ## 1. Overview
+
 The view allows users to input text (1000-10000 characters) and send it to the API to generate AI flashcard proposals. Users can then review, accept, edit, or reject the generated proposals. Finally, they can save all or only accepted flashcards to the database.
 
 ## 2. View Routing
+
 The view should be accessible at `/generate` path.
 
 ## 3. Component Structure
+
 - **FlashcardGenerator** (Astro page with React island)
   - **TextInputArea** - Text input field component for pasting text
   - **GenerateButton** - Button initiating flashcard generation process
@@ -19,6 +22,7 @@ The view should be accessible at `/generate` path.
 ## 4. Component Details
 
 ### FlashcardGenerator (Main View)
+
 - **Description**: Main view integrating all components needed for generating and reviewing flashcards.
 - **Elements**: Text field, generate button, flashcard list, loader, and error messages.
 - **Handled Events**: Text field value change, generate button click, flashcard interactions (accept, edit, reject), save button click.
@@ -28,6 +32,7 @@ The view should be accessible at `/generate` path.
 - **Implementation**: Astro page at `src/pages/generate.astro` with React island for interactivity.
 
 ### TextInputArea
+
 - **Description**: Component enabling user text input.
 - **Elements**: Text field (textarea) with placeholder and label.
 - **Handled Events**: onChange to update text value state.
@@ -37,6 +42,7 @@ The view should be accessible at `/generate` path.
 - **shadcn/ui**: Use `Textarea` component.
 
 ### GenerateButton
+
 - **Description**: Button to launch flashcard generation process.
 - **Elements**: HTML button with "Generate Flashcards" label.
 - **Handled Events**: onClick calling API request function.
@@ -46,6 +52,7 @@ The view should be accessible at `/generate` path.
 - **shadcn/ui**: Use `Button` component with primary variant.
 
 ### FlashcardProposalsList
+
 - **Description**: Component displaying list of flashcard proposals from API.
 - **Elements**: List (grid layout) containing multiple FlashcardProposalItem.
 - **Handled Events**: Passing events to individual cards (accept, edit, reject).
@@ -54,6 +61,7 @@ The view should be accessible at `/generate` path.
 - **Props**: flashcards (proposal list), onAccept, onEdit, onReject.
 
 ### FlashcardProposalItem
+
 - **Description**: Single card presenting one flashcard proposal.
 - **Elements**: Display of front and back text, three buttons: "Accept", "Edit", "Reject".
 - **Handled Events**: onClick for each button modifying card state (e.g., marking as accepted, opening edit mode, removing from list).
@@ -68,6 +76,7 @@ The view should be accessible at `/generate` path.
   - Rejected: Removed from list
 
 ### SkeletonLoader
+
 - **Description**: Loading visualization component (skeleton).
 - **Elements**: UI template (skeleton) imitating card structure to be displayed.
 - **Handled Events**: No user interaction.
@@ -77,6 +86,7 @@ The view should be accessible at `/generate` path.
 - **shadcn/ui**: Use `Skeleton` component.
 
 ### ErrorDisplay
+
 - **Description**: Component displaying error messages (e.g., API errors or form validation).
 - **Elements**: Text message, error icon.
 - **Handled Events**: None - informational component.
@@ -86,6 +96,7 @@ The view should be accessible at `/generate` path.
 - **shadcn/ui**: Use `Alert` component with destructive variant.
 
 ### BulkSaveButtons
+
 - **Description**: Component contains buttons enabling batch save of all generated flashcards or only accepted ones. Allows sending data to backend in one request.
 - **Elements**: Two buttons: "Save All" and "Save Accepted".
 - **Handled Events**: onClick for each button calling appropriate API request function.
@@ -151,6 +162,7 @@ export interface GenerateViewState {
 ## 6. State Management
 
 State will be managed using React hooks (useState, useEffect). Key states:
+
 - **textValue**: Text field value (string)
 - **isLoading**: Loading state for API call (boolean)
 - **errorMessage**: Error message state (string | null)
@@ -164,6 +176,7 @@ Separate API logic into custom hook (e.g., `useFlashcardGeneration`) to handle A
 ## 7. API Integration
 
 ### Endpoint Integration:
+
 - **POST /api/generations**: Send `GenerateFlashcardsCommand` { source_text } and receive response with generation_id, flashcards_proposals, and generated_count.
 - **POST /api/flashcards**: After selecting flashcards via BulkSaveButtons, send POST /api/flashcards. Request uses `FlashcardsCreateCommand` type containing flashcard object array (each must have front ≤200 chars, back ≤500 chars, appropriate source, and generation_id) enabling database save.
 - **Response Validation**: Check HTTP status, handle 400 (validation) and 500 (server error) errors.
@@ -230,12 +243,14 @@ export function useFlashcardGeneration() {
 ## 9. Conditions and Validation
 
 ### Client-Side Validation
+
 - **Text field**: Length must be 1000-10000 characters.
 - **During flashcard edit**: front ≤ 200 chars, back ≤ 500 chars.
 - **Generate button**: Enabled only with valid text.
 - **Save buttons**: Enabled only when flashcards exist to save.
 
 ### Server-Side Validation (Already Implemented)
+
 - API validates all inputs using Zod schemas
 - Returns 400 with validation errors if data invalid
 
@@ -255,6 +270,7 @@ export function useFlashcardGeneration() {
 ## 12. Implementation Steps
 
 ### Phase 1: Setup and Components (shadcn/ui)
+
 1. ✅ Initialize shadcn/ui
 2. Install required shadcn components:
    - `npx shadcn@latest add button`
@@ -266,10 +282,12 @@ export function useFlashcardGeneration() {
    - `npx shadcn@latest add badge`
 
 ### Phase 2: Types and State
+
 3. Create `src/lib/types/flashcard.types.ts` with all necessary types.
 4. Create custom hook `src/lib/hooks/useFlashcardGeneration.ts`.
 
 ### Phase 3: Components
+
 5. Create `src/components/flashcards/TextInputArea.tsx` with validation.
 6. Create `src/components/flashcards/FlashcardProposalItem.tsx` with accept/edit/reject actions.
 7. Create `src/components/flashcards/FlashcardProposalsList.tsx`.
@@ -277,16 +295,19 @@ export function useFlashcardGeneration() {
 9. Create `src/components/flashcards/BulkSaveButtons.tsx`.
 
 ### Phase 4: Main View
+
 10. Create main view page `src/pages/generate.astro`.
 11. Implement main `FlashcardGenerator` React component.
 12. Integrate all subcomponents.
 
 ### Phase 5: Integration
+
 13. Connect to POST /api/generations endpoint.
 14. Implement proposal display and state management.
 15. Connect to POST /api/flashcards endpoint for batch save.
 
 ### Phase 6: Polish
+
 16. Add error handling and display.
 17. Implement toast notifications.
 18. Test all user interaction scenarios (correct and error cases).

@@ -115,24 +115,39 @@ export function RegisterForm() {
       </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md" data-testid="register-error-message">
+        <div
+          className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md"
+          data-testid="register-error-message"
+        >
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md" data-testid="register-success-message">
+        <div
+          className="p-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-md"
+          data-testid="register-success-message"
+        >
           {success}
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={isLoading} data-testid="register-submit-button">
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isLoading}
+        data-testid="register-submit-button"
+      >
         {isLoading ? 'Creating account...' : 'Sign up'}
       </Button>
 
       <p className="text-sm text-center text-gray-600">
         Already have an account?{' '}
-        <a href="/login" className="text-blue-600 hover:underline" data-testid="register-login-link">
+        <a
+          href="/login"
+          className="text-blue-600 hover:underline"
+          data-testid="register-login-link"
+        >
           Log in
         </a>
       </p>

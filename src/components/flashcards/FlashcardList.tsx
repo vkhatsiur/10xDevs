@@ -42,8 +42,7 @@ export function FlashcardList() {
       const query = searchQuery.toLowerCase();
       const filtered = flashcards.filter(
         (card) =>
-          card.front.toLowerCase().includes(query) ||
-          card.back.toLowerCase().includes(query)
+          card.front.toLowerCase().includes(query) || card.back.toLowerCase().includes(query)
       );
       setFilteredFlashcards(filtered);
     }
@@ -157,11 +156,9 @@ export function FlashcardList() {
         <div className="max-w-md mx-auto">
           <div className="text-6xl mb-4">📚</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">No flashcards yet</h2>
-          <p className="text-gray-600 mb-6">
-            Create your first flashcard to start learning!
-          </p>
+          <p className="text-gray-600 mb-6">Create your first flashcard to start learning!</p>
           <Button
-            onClick={() => window.location.href = '/generate'}
+            onClick={() => (window.location.href = '/generate')}
             size="lg"
             data-testid="create-first-flashcard-button"
           >
@@ -196,7 +193,7 @@ export function FlashcardList() {
             : `${filteredFlashcards.length} of ${flashcards.length} flashcards`}
         </p>
         <Button
-          onClick={() => window.location.href = '/generate'}
+          onClick={() => (window.location.href = '/generate')}
           variant="outline"
           size="sm"
           data-testid="add-more-flashcards-button"
@@ -212,7 +209,10 @@ export function FlashcardList() {
           <p className="text-gray-600">No flashcards match your search</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="flashcard-grid">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          data-testid="flashcard-grid"
+        >
           {filteredFlashcards.map((flashcard) => (
             <FlashcardItem
               key={flashcard.id}
@@ -273,7 +273,11 @@ export function FlashcardList() {
             >
               Cancel
             </Button>
-            <Button onClick={handleSaveEdit} disabled={isSaving} data-testid="edit-flashcard-save-button">
+            <Button
+              onClick={handleSaveEdit}
+              disabled={isSaving}
+              data-testid="edit-flashcard-save-button"
+            >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </Button>
           </DialogFooter>

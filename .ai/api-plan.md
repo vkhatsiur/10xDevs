@@ -7,21 +7,25 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 1. Resources
 
 ### Users
+
 - **Database Table**: `users`
 - **Management**: Handled through Supabase Auth
 - **Operations**: Registration and login managed via Supabase Auth (Module 3)
 
 ### Flashcards
+
 - **Database Table**: `flashcards`
 - **Fields**: `id`, `front`, `back`, `source`, `created_at`, `updated_at`, `generation_id`, `user_id`
 - **Description**: Individual flashcards (AI-generated or manually created)
 
 ### Generations
+
 - **Database Table**: `generations`
 - **Fields**: `id`, `user_id`, `model`, `generated_count`, `accepted_unedited_count`, `accepted_edited_count`, `source_text_hash`, `source_text_length`, `generation_duration`, `created_at`, `updated_at`
 - **Description**: Metadata and results of AI generation requests
 
 ### Generation Error Logs
+
 - **Database Table**: `generation_error_logs`
 - **Fields**: `id`, `user_id`, `model`, `source_text_hash`, `source_text_length`, `error_code`, `error_message`, `created_at`
 - **Description**: Error logging for failed AI generations
@@ -43,9 +47,11 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ### 2.2. Flashcards
 
 #### GET `/api/flashcards`
+
 **Description**: Retrieve all flashcards for the authenticated user
 
 **Query Parameters**:
+
 - `page` (default: 1) - Page number for pagination
 - `limit` (default: 10) - Number of items per page
 - `sort` (default: `created_at`) - Field to sort by
@@ -54,6 +60,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 - `generation_id` (optional) - Filter by generation ID
 
 **Response** (200 OK):
+
 ```json
 {
   "data": [
@@ -77,14 +84,17 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `401 Unauthorized` - Invalid or missing authentication token
 
 ---
 
 #### GET `/api/flashcards/{id}`
+
 **Description**: Retrieve a specific flashcard by ID
 
 **Response** (200 OK):
+
 ```json
 {
   "id": 1,
@@ -99,15 +109,18 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `401 Unauthorized` - Invalid or missing authentication token
 - `404 Not Found` - Flashcard not found
 
 ---
 
 #### POST `/api/flashcards`
+
 **Description**: Create one or more flashcards (manually or from AI generation proposals)
 
 **Request Body**:
+
 ```json
 {
   "flashcards": [
@@ -128,6 +141,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Validation Rules**:
+
 - `front`: Required, maximum 200 characters
 - `back`: Required, maximum 500 characters
 - `source`: Required, must be one of: `ai-full`, `ai-edited`, `manual`
@@ -136,6 +150,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
   - Must be `null` for `manual` source
 
 **Response** (201 Created):
+
 ```json
 {
   "flashcards": [
@@ -164,6 +179,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `400 Bad Request` - Validation errors (invalid length, source, or generation_id)
 - `401 Unauthorized` - Invalid or missing authentication token
 - `404 Not Found` - Generation ID not found (for AI sources)
@@ -171,9 +187,11 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ---
 
 #### PUT `/api/flashcards/{id}`
+
 **Description**: Update an existing flashcard
 
 **Request Body**:
+
 ```json
 {
   "front": "Updated question",
@@ -182,10 +200,12 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Business Logic**:
+
 - If flashcard source is `ai-full` and user edits it, change source to `ai-edited`
 - Update `updated_at` timestamp automatically (database trigger)
 
 **Response** (200 OK):
+
 ```json
 {
   "id": 1,
@@ -200,6 +220,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `400 Bad Request` - Validation errors
 - `401 Unauthorized` - Invalid or missing authentication token
 - `404 Not Found` - Flashcard not found
@@ -207,9 +228,11 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ---
 
 #### DELETE `/api/flashcards/{id}`
+
 **Description**: Delete a flashcard
 
 **Response** (200 OK):
+
 ```json
 {
   "message": "Flashcard deleted successfully"
@@ -217,6 +240,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `401 Unauthorized` - Invalid or missing authentication token
 - `404 Not Found` - Flashcard not found
 
@@ -225,11 +249,13 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ### 2.3. Generations
 
 #### POST `/api/generations`
+
 **Description**: Initiate AI generation process to create flashcard proposals
 
 **Important**: This endpoint **does NOT save flashcards** to the database. It only returns proposals. The user must then accept proposals and save them via `POST /api/flashcards`.
 
 **Request Body**:
+
 ```json
 {
   "source_text": "User provided text (1000 to 10000 characters)"
@@ -237,9 +263,11 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Validation Rules**:
+
 - `source_text`: Required, minimum 1000 characters, maximum 10000 characters
 
 **Business Logic**:
+
 1. Validate `source_text` length
 2. Hash source text (SHA-256) for privacy and duplicate detection
 3. Call AI service (OpenRouter) to generate flashcard proposals
@@ -247,6 +275,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 5. Return proposals to user (NOT saved to flashcards table yet)
 
 **Response** (201 Created):
+
 ```json
 {
   "generation_id": 123,
@@ -269,24 +298,29 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `400 Bad Request` - Invalid source text (length out of range)
 - `401 Unauthorized` - Invalid or missing authentication token
 - `500 Internal Server Error` - AI service error (logged in `generation_error_logs`)
 
 **Error Logging**:
+
 - All AI service errors are logged to `generation_error_logs` table
 - Includes: error code, error message, model, source_text_hash, source_text_length
 
 ---
 
 #### GET `/api/generations`
+
 **Description**: Retrieve list of generation requests for authenticated user
 
 **Query Parameters**:
+
 - `page` (default: 1)
 - `limit` (default: 10)
 
 **Response** (200 OK):
+
 ```json
 {
   "data": [
@@ -312,14 +346,17 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `401 Unauthorized` - Invalid or missing authentication token
 
 ---
 
 #### GET `/api/generations/{id}`
+
 **Description**: Retrieve detailed information about a specific generation
 
 **Response** (200 OK):
+
 ```json
 {
   "id": 123,
@@ -345,6 +382,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `401 Unauthorized` - Invalid or missing authentication token
 - `404 Not Found` - Generation not found
 
@@ -355,13 +393,16 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 **Note**: This endpoint is typically for admin/debugging purposes.
 
 #### GET `/api/generation-error-logs`
+
 **Description**: Retrieve error logs for AI flashcard generation
 
 **Query Parameters**:
+
 - `page` (default: 1)
 - `limit` (default: 10)
 
 **Response** (200 OK):
+
 ```json
 {
   "data": [
@@ -384,6 +425,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 **Errors**:
+
 - `401 Unauthorized` - Invalid or missing authentication token
 - `403 Forbidden` - Insufficient permissions (admin only)
 
@@ -392,11 +434,13 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 3. Authentication and Authorization
 
 ### Mechanism
+
 - **Token-based authentication** using Supabase Auth
 - Users authenticate via `/auth/login` or `/auth/register`
 - Receive a bearer token for subsequent requests
 
 ### Process
+
 1. User registers or logs in via Supabase Auth
 2. Receives JWT token
 3. Includes token in `Authorization` header: `Bearer <token>`
@@ -404,11 +448,13 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 5. Database Row-Level Security (RLS) ensures users access only their own data
 
 ### MVP Simplification
+
 - For MVP (Module 2), we use a **hardcoded test user ID**
 - Full authentication implemented in **Module 3**
 - RLS policies enabled in **Module 3**
 
 ### Security Considerations
+
 - Use HTTPS in production
 - Implement rate limiting (Module 3)
 - Secure error messages (don't expose internal details)
@@ -422,18 +468,21 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ### Validation Rules
 
 #### Flashcards
+
 - `front`: Maximum 200 characters
 - `back`: Maximum 500 characters
 - `source`: Must be one of: `ai-full`, `ai-edited`, `manual`
 - `generation_id`: Required for AI sources, null for manual
 
 #### Generations
+
 - `source_text`: 1000-10000 characters
 - `source_text_hash`: SHA-256 hash (computed automatically)
 
 ### Business Logic
 
 #### AI Generation Flow
+
 1. User submits source text via `POST /api/generations`
 2. System validates input (1000-10000 chars)
 3. System hashes source text (privacy)
@@ -445,12 +494,14 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 9. User saves accepted flashcards via `POST /api/flashcards`
 
 #### Flashcard Management
+
 - Creating flashcard: Set user_id, validate inputs
 - Updating flashcard: If source is `ai-full` and edited, change to `ai-edited`
 - Deleting flashcard: Cascade delete handled by database
 - `updated_at` automatically updated via database trigger
 
 #### Generation Statistics
+
 - `generated_count`: Set when generation created
 - `accepted_unedited_count`: Updated when user saves `ai-full` flashcards
 - `accepted_edited_count`: Updated when user edits and saves flashcards
@@ -460,6 +511,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 5. Error Handling
 
 ### Standard Error Response Format
+
 ```json
 {
   "error": "Human-readable error message",
@@ -471,6 +523,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ```
 
 ### HTTP Status Codes
+
 - `200 OK` - Successful GET/PUT/DELETE
 - `201 Created` - Successful POST
 - `400 Bad Request` - Validation errors, invalid input
@@ -480,6 +533,7 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 - `500 Internal Server Error` - Server or service errors
 
 ### Error Logging
+
 - Log all errors server-side
 - Include timestamp, user_id, endpoint, error details
 - For AI errors, log to `generation_error_logs` table
@@ -490,17 +544,20 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 6. Performance Considerations
 
 ### Database
+
 - Indexes on foreign keys (`user_id`, `generation_id`)
 - Indexes on commonly queried fields (`created_at`)
 - Pagination for large result sets
 - Efficient batch operations for multiple flashcards
 
 ### API
+
 - Batch insert for multiple flashcards (single query)
 - Caching strategies (Module 3)
 - Connection pooling (handled by Supabase)
 
 ### AI Service
+
 - Timeout: 60 seconds
 - Retry logic with exponential backoff
 - Asynchronous processing for large requests (future)
@@ -510,10 +567,12 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 7. API Versioning
 
 ### Current Version
+
 - Version: v1 (implicit)
 - Base URL: `/api`
 
 ### Future Versioning Strategy
+
 - URL-based versioning: `/api/v2/...`
 - Maintain backward compatibility
 - Deprecation warnings for old versions
@@ -523,11 +582,13 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 8. Rate Limiting (Module 3)
 
 ### Limits
+
 - **Anonymous**: Not allowed
 - **Authenticated**: 100 requests/minute
 - **AI Generation**: 10 requests/hour
 
 ### Headers
+
 - `X-RateLimit-Limit`: Total allowed requests
 - `X-RateLimit-Remaining`: Remaining requests
 - `X-RateLimit-Reset`: Timestamp when limit resets
@@ -537,16 +598,19 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 9. Testing Strategy
 
 ### Unit Tests
+
 - Test validation functions
 - Test business logic in services
 - Mock database and AI service calls
 
 ### Integration Tests
+
 - Test complete API flows
 - Test authentication and authorization
 - Test error handling
 
 ### Manual Testing (MVP)
+
 - Use curl or Postman
 - Verify Supabase database records
 - Check error logging
@@ -556,12 +620,14 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 ## 10. Implementation Phases
 
 ### Phase 1: Core Infrastructure (✅ Done)
+
 - Database schema and migrations
 - Supabase client setup
 - Environment configuration
 - TypeScript types generation
 
 ### Phase 2: Flashcards API (Current)
+
 - GET /api/flashcards (list)
 - GET /api/flashcards/{id} (single)
 - POST /api/flashcards (create)
@@ -569,18 +635,21 @@ This document defines the REST API structure for 10xCards MVP. The API follows R
 - DELETE /api/flashcards/{id} (delete)
 
 ### Phase 3: Generations API (Current)
+
 - POST /api/generations (create proposals)
 - GET /api/generations (list)
 - GET /api/generations/{id} (single)
 - OpenRouter service integration
 
 ### Phase 4: Frontend Integration (Next)
+
 - React components
 - API client hooks
 - Error handling UI
 - Loading states
 
 ### Phase 5: Authentication (Module 3)
+
 - Supabase Auth integration
 - Protected routes
 - RLS policies
@@ -599,16 +668,16 @@ const saveFlashcards = async (proposals: FlashcardProposal[], generationId: numb
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` // Module 3
+      Authorization: `Bearer ${token}`, // Module 3
     },
     body: JSON.stringify({
-      flashcards: proposals.map(p => ({
+      flashcards: proposals.map((p) => ({
         front: p.front,
         back: p.back,
         source: 'ai-full',
-        generation_id: generationId
-      }))
-    })
+        generation_id: generationId,
+      })),
+    }),
   });
 
   return await response.json();
@@ -620,9 +689,9 @@ const generateProposals = async (sourceText: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` // Module 3
+      Authorization: `Bearer ${token}`, // Module 3
     },
-    body: JSON.stringify({ source_text: sourceText })
+    body: JSON.stringify({ source_text: sourceText }),
   });
 
   return await response.json();
@@ -634,11 +703,13 @@ const generateProposals = async (sourceText: string) => {
 ## 12. Documentation
 
 ### API Documentation Tools
+
 - OpenAPI/Swagger specification (future)
 - Postman collection (future)
 - Interactive API explorer (future)
 
 ### Current Documentation
+
 - This document (api-plan.md)
 - Implementation plans for specific endpoints
 - Database schema documentation (db-plan.md)

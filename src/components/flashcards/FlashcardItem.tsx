@@ -24,7 +24,7 @@ export function FlashcardItem({ flashcard, onEdit, onDelete }: FlashcardItemProp
     const badges = {
       'ai-full': { label: 'AI Generated', color: 'bg-blue-100 text-blue-700' },
       'ai-edited': { label: 'AI Edited', color: 'bg-purple-100 text-purple-700' },
-      'manual': { label: 'Manual', color: 'bg-green-100 text-green-700' },
+      manual: { label: 'Manual', color: 'bg-green-100 text-green-700' },
     };
     return badges[source as keyof typeof badges] || badges.manual;
   };
@@ -98,9 +98,7 @@ export function FlashcardItem({ flashcard, onEdit, onDelete }: FlashcardItemProp
 
               {/* Answer */}
               <div className="flex-1 flex items-center justify-center overflow-y-auto">
-                <p className="text-lg text-gray-800 text-center break-words">
-                  {flashcard.back}
-                </p>
+                <p className="text-lg text-gray-800 text-center break-words">{flashcard.back}</p>
               </div>
 
               {/* Flip Hint */}

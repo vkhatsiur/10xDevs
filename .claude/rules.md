@@ -36,6 +36,7 @@ This is a web application for AI-powered flashcard generation built with Astro, 
   6. Static content/constants
 
 ### Component Example
+
 ```tsx
 import { useState } from 'react';
 import type { FC } from 'react';
@@ -48,10 +49,7 @@ interface ButtonProps {
 
 export const Button: FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) => {
   return (
-    <button
-      onClick={onClick}
-      className={variant === 'primary' ? 'btn-primary' : 'btn-secondary'}
-    >
+    <button onClick={onClick} className={variant === 'primary' ? 'btn-primary' : 'btn-secondary'}>
       {label}
     </button>
   );
@@ -75,6 +73,7 @@ export const Button: FC<ButtonProps> = ({ label, onClick, variant = 'primary' })
 - Use Shadcn/ui components when available
 
 ### Tailwind Best Practices
+
 - Group related utilities: `className="flex items-center gap-2"`
 - Use semantic spacing: `p-4`, `mt-6`, `space-y-4`
 - Leverage Tailwind's color system: `bg-blue-500`, `text-gray-700`
@@ -283,11 +282,7 @@ interface FlashcardListProps {
   onEdit: (id: string) => void;
 }
 
-export const FlashcardList: FC<FlashcardListProps> = ({
-  flashcards,
-  onDelete,
-  onEdit,
-}) => {
+export const FlashcardList: FC<FlashcardListProps> = ({ flashcards, onDelete, onEdit }) => {
   const [flipped, setFlipped] = useState<Record<string, boolean>>({});
 
   const handleFlip = (id: string) => {
@@ -317,18 +312,10 @@ export const FlashcardList: FC<FlashcardListProps> = ({
             )}
           </div>
           <div className="flex gap-2">
-            <Button
-              onClick={() => onEdit(card.id)}
-              variant="outline"
-              size="sm"
-            >
+            <Button onClick={() => onEdit(card.id)} variant="outline" size="sm">
               Edit
             </Button>
-            <Button
-              onClick={() => onDelete(card.id)}
-              variant="destructive"
-              size="sm"
-            >
+            <Button onClick={() => onDelete(card.id)} variant="destructive" size="sm">
               Delete
             </Button>
           </div>

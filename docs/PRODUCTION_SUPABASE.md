@@ -5,6 +5,7 @@ This guide walks you through setting up a production Supabase project for 10xCar
 ## Overview
 
 You need **two separate Supabase projects**:
+
 - **Development** - Local Supabase or cloud project for development
 - **E2E Testing** - Cloud project for E2E tests (already configured)
 - **Production** - Cloud project for production deployment ⭐ (this guide)
@@ -143,12 +144,12 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 
 You'll add these in Cloudflare Pages dashboard (covered in deployment guide):
 
-| Variable Name | Value | Required |
-|--------------|-------|----------|
-| `PUBLIC_SUPABASE_URL` | Production Supabase URL | Yes |
-| `PUBLIC_SUPABASE_ANON_KEY` | Production anon key | Yes |
-| `SUPABASE_SERVICE_ROLE_KEY` | Production service role key | Yes |
-| `OPENROUTER_API_KEY` | Your OpenRouter API key | Yes |
+| Variable Name               | Value                       | Required |
+| --------------------------- | --------------------------- | -------- |
+| `PUBLIC_SUPABASE_URL`       | Production Supabase URL     | Yes      |
+| `PUBLIC_SUPABASE_ANON_KEY`  | Production anon key         | Yes      |
+| `SUPABASE_SERVICE_ROLE_KEY` | Production service role key | Yes      |
+| `OPENROUTER_API_KEY`        | Your OpenRouter API key     | Yes      |
 
 ## Step 8: Test Production Database
 
@@ -225,6 +226,7 @@ Before going live:
 **Error**: Users don't receive confirmation emails
 
 **Solution**:
+
 1. Check SMTP settings (Settings → Auth)
 2. Verify email templates are configured
 3. Check spam folder
@@ -235,20 +237,21 @@ Before going live:
 **Error**: Too many requests
 
 **Solution**:
+
 1. Increase rate limits in Settings → Auth
 2. Implement client-side rate limiting
 3. Add Cloudflare rate limiting rules
 
 ## Production vs Development Differences
 
-| Feature | Development | Production |
-|---------|------------|------------|
-| Database | Local Supabase | Cloud Supabase |
-| Users | Test users | Real users |
-| Emails | Console logs | Real SMTP |
-| Backups | Manual | Automated |
-| Monitoring | None | Dashboard + Alerts |
-| Rate Limits | Unlimited | Enforced |
+| Feature     | Development    | Production         |
+| ----------- | -------------- | ------------------ |
+| Database    | Local Supabase | Cloud Supabase     |
+| Users       | Test users     | Real users         |
+| Emails      | Console logs   | Real SMTP          |
+| Backups     | Manual         | Automated          |
+| Monitoring  | None           | Dashboard + Alerts |
+| Rate Limits | Unlimited      | Enforced           |
 
 ## Next Steps
 

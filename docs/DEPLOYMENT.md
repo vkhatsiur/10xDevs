@@ -40,13 +40,13 @@ git push origin main
 
 Cloudflare will auto-detect, but verify:
 
-| Setting | Value |
-|---------|-------|
-| **Production branch** | `main` |
-| **Build command** | `npm run build` |
-| **Build output directory** | `dist` |
-| **Root directory** | `src` (if your code is in src folder) |
-| **Node version** | `20` or latest |
+| Setting                    | Value                                 |
+| -------------------------- | ------------------------------------- |
+| **Production branch**      | `main`                                |
+| **Build command**          | `npm run build`                       |
+| **Build output directory** | `dist`                                |
+| **Root directory**         | `src` (if your code is in src folder) |
+| **Node version**           | `20` or latest                        |
 
 Click **Save and Deploy** (will fail first time - we need environment variables)
 
@@ -56,15 +56,16 @@ Click **Save and Deploy** (will fail first time - we need environment variables)
 2. Click **Add variables**
 3. Add the following for **Production**:
 
-| Variable Name | Value | Notes |
-|--------------|-------|-------|
-| `PUBLIC_SUPABASE_URL` | `https://your-prod-project.supabase.co` | From production Supabase |
-| `PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGci...` | Production anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | `eyJhbGci...` | Production service role key |
-| `OPENROUTER_API_KEY` | `sk-or-v1-...` | Your OpenRouter API key |
-| `NODE_VERSION` | `20` | Ensures correct Node version |
+| Variable Name               | Value                                   | Notes                        |
+| --------------------------- | --------------------------------------- | ---------------------------- |
+| `PUBLIC_SUPABASE_URL`       | `https://your-prod-project.supabase.co` | From production Supabase     |
+| `PUBLIC_SUPABASE_ANON_KEY`  | `eyJhbGci...`                           | Production anon key          |
+| `SUPABASE_SERVICE_ROLE_KEY` | `eyJhbGci...`                           | Production service role key  |
+| `OPENROUTER_API_KEY`        | `sk-or-v1-...`                          | Your OpenRouter API key      |
+| `NODE_VERSION`              | `20`                                    | Ensures correct Node version |
 
 **Important**:
+
 - Keep `SUPABASE_SERVICE_ROLE_KEY` secret (encrypted by default)
 - `PUBLIC_*` variables are exposed to frontend
 - Click **Encrypt** for sensitive keys
@@ -76,11 +77,13 @@ Click **Save and Deploy** (will fail first time - we need environment variables)
 Two options:
 
 **Option A: Retry Current Deployment**
+
 1. Go to **Deployments** tab
 2. Click on failed deployment
 3. Click **Retry deployment**
 
 **Option B: Trigger New Deployment**
+
 1. Push any commit to GitHub
 2. Cloudflare automatically deploys
 
@@ -136,11 +139,13 @@ git push origin main
 Every branch and PR gets a preview deployment:
 
 1. Create a new branch:
+
    ```bash
    git checkout -b feature/new-feature
    ```
 
 2. Push to GitHub:
+
    ```bash
    git push origin feature/new-feature
    ```
@@ -181,6 +186,7 @@ Every branch and PR gets a preview deployment:
 **Error**: `Command failed with exit code 1`
 
 **Solution**:
+
 1. Check build log in Cloudflare
 2. Ensure `npm run build` works locally
 3. Verify Node version matches (`NODE_VERSION=20`)
@@ -191,6 +197,7 @@ Every branch and PR gets a preview deployment:
 **Error**: `PUBLIC_SUPABASE_URL is undefined`
 
 **Solution**:
+
 1. Verify variables are set in Cloudflare Pages settings
 2. Redeploy after adding variables
 3. Check variable names match exactly (case-sensitive)
@@ -201,6 +208,7 @@ Every branch and PR gets a preview deployment:
 **Error**: Page refreshes return 404
 
 **Solution**:
+
 - Astro SSR should handle this automatically with Cloudflare adapter
 - Verify `output: 'server'` in `astro.config.mjs`
 - Check Functions logs for errors
@@ -210,6 +218,7 @@ Every branch and PR gets a preview deployment:
 **Error**: API routes return 500 or timeout
 
 **Solution**:
+
 1. Check **Functions log** in deployment details
 2. Verify environment variables are accessible
 3. Check Supabase connection from Cloudflare
@@ -218,6 +227,7 @@ Every branch and PR gets a preview deployment:
 ### Slow Performance
 
 **Solution**:
+
 1. Enable caching in Cloudflare
 2. Go to **Caching** → **Configuration**
 3. Set cache rules for static assets
@@ -259,8 +269,8 @@ Cloudflare provides automatic DDoS protection. Enable:
 export async function GET({ request }) {
   return new Response(data, {
     headers: {
-      'Cache-Control': 'public, max-age=60, s-maxage=60'
-    }
+      'Cache-Control': 'public, max-age=60, s-maxage=60',
+    },
   });
 }
 ```

@@ -12,13 +12,10 @@ export const GET: APIRoute = async ({ locals }) => {
   try {
     // Check authentication
     if (!locals.user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        {
-          status: 401,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const flashcards = await flashcardService.getFlashcards(locals.user.id);
@@ -39,13 +36,10 @@ export const GET: APIRoute = async ({ locals }) => {
     );
   } catch (error) {
     console.error('Error fetching flashcards:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };
 
@@ -54,13 +48,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
   try {
     // Check authentication
     if (!locals.user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        {
-          status: 401,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Parse request body
@@ -111,13 +102,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
       locals.user.id
     );
 
-    return new Response(
-      JSON.stringify({ flashcards: createdFlashcards }),
-      {
-        status: 201,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ flashcards: createdFlashcards }), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error creating flashcards:', error);
     return new Response(

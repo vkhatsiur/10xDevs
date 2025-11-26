@@ -123,9 +123,7 @@ describe('OpenRouterService', () => {
         choices: [
           {
             message: {
-              content: '```json\n' + JSON.stringify([
-                { front: 'Q1', back: 'A1' },
-              ]) + '\n```',
+              content: '```json\n' + JSON.stringify([{ front: 'Q1', back: 'A1' }]) + '\n```',
             },
           },
         ],
@@ -147,9 +145,7 @@ describe('OpenRouterService', () => {
         choices: [
           {
             message: {
-              content: JSON.stringify([
-                { front: 'a'.repeat(250), back: 'b'.repeat(600) },
-              ]),
+              content: JSON.stringify([{ front: 'a'.repeat(250), back: 'b'.repeat(600) }]),
             },
           },
         ],
@@ -176,9 +172,7 @@ describe('OpenRouterService', () => {
         text: async () => 'Bad Request',
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(HttpError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(HttpError);
     });
 
     it('should throw HttpError on HTTP 5xx', async () => {
@@ -190,9 +184,7 @@ describe('OpenRouterService', () => {
         text: async () => 'Internal Server Error',
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(HttpError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(HttpError);
     });
 
     it('should throw InvalidResponseError on empty response', async () => {
@@ -212,9 +204,9 @@ describe('OpenRouterService', () => {
         json: async () => mockResponse,
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(InvalidResponseError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(
+        InvalidResponseError
+      );
     });
 
     it('should throw InvalidResponseError on invalid JSON', async () => {
@@ -234,9 +226,9 @@ describe('OpenRouterService', () => {
         json: async () => mockResponse,
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(InvalidResponseError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(
+        InvalidResponseError
+      );
     });
 
     it('should throw InvalidResponseError on missing front/back', async () => {
@@ -258,9 +250,9 @@ describe('OpenRouterService', () => {
         json: async () => mockResponse,
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(InvalidResponseError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(
+        InvalidResponseError
+      );
     });
   });
 
@@ -331,9 +323,7 @@ describe('OpenRouterService', () => {
         text: async () => 'Bad Request',
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(HttpError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(HttpError);
 
       // Should not retry
       expect(fetchMock).toHaveBeenCalledOnce();
@@ -348,9 +338,7 @@ describe('OpenRouterService', () => {
         text: async () => 'Server Error',
       });
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(HttpError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(HttpError);
 
       // maxRetries=2 means: attempt 1 (initial) + attempt 2 (1 retry) = 2 total calls
       expect(fetchMock).toHaveBeenCalledTimes(2);
@@ -362,16 +350,12 @@ describe('OpenRouterService', () => {
     // Timeout functionality works in production - documented in test-plan.md
     it.skip('should timeout after configured time', async () => {
       // Make fetch never resolve
-      fetchMock.mockImplementation(
-        () => new Promise((resolve) => setTimeout(resolve, 10000))
-      );
+      fetchMock.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 10000)));
 
       // Set very short timeout
       service.setTimeout(100);
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow(ApiTimeoutError);
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow(ApiTimeoutError);
     }, 10000); // Increase test timeout
 
     it.skip('should abort request on timeout', async () => {
@@ -389,12 +373,10 @@ describe('OpenRouterService', () => {
 
       service.setTimeout(100);
 
-      await expect(
-        service.generateFlashcards('a'.repeat(1000))
-      ).rejects.toThrow();
+      await expect(service.generateFlashcards('a'.repeat(1000))).rejects.toThrow();
 
       // Wait a bit for abort to be called
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 200));
       expect(abortCalled).toBe(true);
     }, 10000);
   });

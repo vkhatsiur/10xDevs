@@ -223,7 +223,10 @@ ${sourceText}`;
 
     // Validate structure
     if (!Array.isArray(proposals) || proposals.length === 0) {
-      throw new InvalidResponseError('Invalid response format: expected non-empty array', jsonContent);
+      throw new InvalidResponseError(
+        'Invalid response format: expected non-empty array',
+        jsonContent
+      );
     }
 
     // Validate and transform proposals

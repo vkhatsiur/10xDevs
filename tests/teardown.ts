@@ -33,7 +33,7 @@ async function teardown() {
       return;
     }
 
-    const testUser = userData.users.find(u => u.email === testUserEmail);
+    const testUser = userData.users.find((u) => u.email === testUserEmail);
 
     if (!testUser) {
       console.log(`✓ Test user not found (${testUserEmail})`);

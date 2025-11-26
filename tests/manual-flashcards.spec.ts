@@ -14,10 +14,7 @@ test.describe('Manual Flashcard Creation', () => {
     await generatePage.goto();
 
     // Create single flashcard
-    await generatePage.createSingleFlashcard(
-      testData.flashcard.front,
-      testData.flashcard.back
-    );
+    await generatePage.createSingleFlashcard(testData.flashcard.front, testData.flashcard.back);
 
     // Navigate to My Flashcards
     await flashcardsPage.goto();
@@ -75,10 +72,12 @@ test.describe('Manual Flashcard Creation', () => {
     await authenticatedPage.waitForTimeout(1000);
 
     // Delete first visible flashcard
-    const firstDeleteButton = authenticatedPage.locator('[data-testid^="delete-flashcard-"]').first();
+    const firstDeleteButton = authenticatedPage
+      .locator('[data-testid^="delete-flashcard-"]')
+      .first();
 
     // Handle confirmation dialog
-    authenticatedPage.once('dialog', dialog => dialog.accept());
+    authenticatedPage.once('dialog', (dialog) => dialog.accept());
     await firstDeleteButton.click();
 
     // Verify success toast

@@ -5,6 +5,7 @@
 The OpenRouter service integrates communication with LLM models via the OpenRouter API. The main goal of this service is to enable automatic generation of flashcards based on a combination of system and user messages, while processing structured responses in JSON format.
 
 **Key Responsibilities**:
+
 - Send requests to OpenRouter API
 - Configure model parameters (temperature, top_p, etc.)
 - Build proper prompt for flashcard generation
@@ -16,6 +17,7 @@ The OpenRouter service integrates communication with LLM models via the OpenRout
 ## 2. Constructor Description
 
 The constructor should:
+
 - Initialize API configuration (API key, base URL)
 - Set default model parameters (temperature, top_p, frequency_penalty, presence_penalty)
 - Allow configuration of system message (role: 'system') and user message (role: 'user')
@@ -42,14 +44,17 @@ constructor(config?: OpenRouterConfig) {
 ### Main Public Interface
 
 #### `generateFlashcards(sourceText: string): Promise<FlashcardProposal[]>`
+
 **Purpose**: Generate flashcard proposals from source text
 
 **Parameters**:
+
 - `sourceText` (string): Text to generate flashcards from
 
 **Returns**: Promise<FlashcardProposal[]>
 
 **Behavior**:
+
 - Builds appropriate prompt
 - Calls OpenRouter API
 - Parses JSON response
@@ -57,6 +62,7 @@ constructor(config?: OpenRouterConfig) {
 - Returns array of flashcard proposals
 
 **Example**:
+
 ```typescript
 const service = new OpenRouterService();
 const proposals = await service.generateFlashcards(longText);
@@ -66,19 +72,21 @@ const proposals = await service.generateFlashcards(longText);
 ---
 
 #### `setModel(modelName: string, parameters?: ModelParameters): void`
+
 **Purpose**: Configure which model to use and its parameters
 
 **Parameters**:
+
 - `modelName` (string): Model identifier (e.g., 'openai/gpt-4o-mini')
 - `parameters` (optional): Model-specific parameters
 
 ```typescript
 interface ModelParameters {
-  temperature?: number;        // 0-2, default 0.7
-  top_p?: number;             // 0-1, default 1
-  frequency_penalty?: number;  // -2 to 2, default 0
-  presence_penalty?: number;   // -2 to 2, default 0
-  max_tokens?: number;        // Max tokens in response
+  temperature?: number; // 0-2, default 0.7
+  top_p?: number; // 0-1, default 1
+  frequency_penalty?: number; // -2 to 2, default 0
+  presence_penalty?: number; // -2 to 2, default 0
+  max_tokens?: number; // Max tokens in response
 }
 
 setModel('openai/gpt-4o-mini', {
@@ -90,9 +98,11 @@ setModel('openai/gpt-4o-mini', {
 ---
 
 #### `setTimeout(milliseconds: number): void`
+
 **Purpose**: Set request timeout
 
 **Parameters**:
+
 - `milliseconds` (number): Timeout in milliseconds
 
 ```typescript
@@ -102,9 +112,11 @@ service.setTimeout(30000); // 30 seconds
 ---
 
 #### `setMaxRetries(retries: number): void`
+
 **Purpose**: Configure retry behavior
 
 **Parameters**:
+
 - `retries` (number): Maximum number of retry attempts
 
 ```typescript
@@ -150,14 +162,17 @@ private retryDelay: number = 1000; // Initial retry delay (ms)
 ---
 
 ### `private buildPrompt(sourceText: string): string`
+
 **Purpose**: Build the prompt for flashcard generation
 
 **Parameters**:
+
 - `sourceText` (string): User's source text
 
 **Returns**: string (formatted prompt)
 
 **Implementation**:
+
 ```typescript
 private buildPrompt(sourceText: string): string {
   return `Generate flashcards from the following text. Create 3-5 high-quality flashcards.
@@ -184,9 +199,11 @@ ${sourceText}`;
 ---
 
 ### `private buildRequestPayload(prompt: string): RequestPayload`
+
 **Purpose**: Build the API request payload
 
 **Implementation**:
+
 ```typescript
 private buildRequestPayload(prompt: string): RequestPayload {
   return {
@@ -209,15 +226,18 @@ private buildRequestPayload(prompt: string): RequestPayload {
 ---
 
 ### `private async executeRequest(payload: RequestPayload, attempt: number = 1): Promise<ApiResponse>`
+
 **Purpose**: Execute HTTP request with retry logic
 
 **Parameters**:
+
 - `payload` (RequestPayload): Request body
 - `attempt` (number): Current attempt number
 
 **Returns**: Promise<ApiResponse>
 
 **Implementation**:
+
 ```typescript
 private async executeRequest(
   payload: RequestPayload,
@@ -264,9 +284,11 @@ private async executeRequest(
 ---
 
 ### `private shouldRetry(error: unknown): boolean`
+
 **Purpose**: Determine if error is retryable
 
 **Implementation**:
+
 ```typescript
 private shouldRetry(error: unknown): boolean {
   if (error instanceof HttpError) {
@@ -286,10 +308,12 @@ private shouldRetry(error: unknown): boolean {
 ---
 
 ### `private parseResponse(apiResponse: ApiResponse): FlashcardProposal[]`
+
 **Purpose**: Parse and validate AI response
 
 **Implementation**:
-```typescript
+
+````typescript
 private parseResponse(apiResponse: ApiResponse): FlashcardProposal[] {
   const content = apiResponse.choices[0]?.message?.content;
 
@@ -332,11 +356,12 @@ private parseResponse(apiResponse: ApiResponse): FlashcardProposal[] {
     };
   });
 }
-```
+````
 
 ---
 
 ### `private sleep(ms: number): Promise<void>`
+
 **Purpose**: Sleep utility for retry delays
 
 ```typescript
@@ -370,7 +395,10 @@ class ApiTimeoutError extends Error {
 }
 
 class InvalidResponseError extends Error {
-  constructor(message: string, public response?: string) {
+  constructor(
+    message: string,
+    public response?: string
+  ) {
     super(message);
     this.name = 'InvalidResponseError';
   }
@@ -424,6 +452,7 @@ private logError(error: unknown, context: Record<string, any>): void {
 ## 6. Security Considerations
 
 ### API Key Management
+
 - **Storage**: Store API key in environment variables
 - **Access**: Never expose API key in client-side code
 - **Validation**: Check API key exists and is valid on initialization
@@ -446,11 +475,13 @@ constructor() {
 ```
 
 ### Data Privacy
+
 - **No logging of sensitive data**: Don't log full source text or API keys
 - **Truncate logs**: If logging responses, truncate to reasonable length
 - **Secure transmission**: Always use HTTPS (OpenRouter API is HTTPS)
 
 ### Input Validation
+
 - Validate source text length before sending to API
 - Sanitize source text to prevent prompt injection
 - Validate AI responses before returning
@@ -460,6 +491,7 @@ constructor() {
 ## 7. Step-by-Step Implementation Plan
 
 ### Step 1: Project Setup
+
 1. Verify dependencies are installed (Astro, TypeScript)
 2. Review OpenRouter API documentation
 3. Obtain API key from https://openrouter.ai/keys
@@ -468,6 +500,7 @@ constructor() {
 ---
 
 ### Step 2: Create Type Definitions
+
 **File**: `src/lib/types/openrouter.types.ts`
 
 ```typescript
@@ -524,6 +557,7 @@ export interface ApiResponse {
 ---
 
 ### Step 3: Create Error Classes
+
 **File**: `src/lib/errors/openrouter.errors.ts`
 
 ```typescript
@@ -545,7 +579,10 @@ export class ApiTimeoutError extends Error {
 }
 
 export class InvalidResponseError extends Error {
-  constructor(message: string, public response?: string) {
+  constructor(
+    message: string,
+    public response?: string
+  ) {
     super(message);
     this.name = 'InvalidResponseError';
   }
@@ -555,6 +592,7 @@ export class InvalidResponseError extends Error {
 ---
 
 ### Step 4: Implement OpenRouter Service
+
 **File**: `src/lib/services/openrouter.service.ts`
 
 Implement all methods described in sections 3 and 4.
@@ -562,9 +600,10 @@ Implement all methods described in sections 3 and 4.
 ---
 
 ### Step 5: Create Unit Tests
+
 **File**: `src/lib/services/__tests__/openrouter.service.test.ts`
 
-```typescript
+````typescript
 import { describe, it, expect, vi } from 'vitest';
 import { OpenRouterService } from '../openrouter.service';
 
@@ -593,11 +632,12 @@ describe('OpenRouterService', () => {
     // Test that client errors don't retry
   });
 });
-```
+````
 
 ---
 
 ### Step 6: Integration Testing
+
 1. Test with real OpenRouter API
 2. Verify response format
 3. Test error scenarios (invalid key, timeout)
@@ -606,6 +646,7 @@ describe('OpenRouterService', () => {
 ---
 
 ### Step 7: Documentation
+
 1. Add JSDoc comments to all public methods
 2. Create usage examples
 3. Document error handling
@@ -686,6 +727,7 @@ try {
 ## 9. Performance Optimization
 
 ### Caching (Future)
+
 ```typescript
 private cache = new Map<string, { proposals: FlashcardProposal[], timestamp: number }>();
 private cacheTTL = 24 * 60 * 60 * 1000; // 24 hours
@@ -706,6 +748,7 @@ async generateFlashcards(sourceText: string): Promise<FlashcardProposal[]> {
 ```
 
 ### Request Deduplication
+
 ```typescript
 private inFlightRequests = new Map<string, Promise<FlashcardProposal[]>>();
 
@@ -732,6 +775,7 @@ async generateFlashcards(sourceText: string): Promise<FlashcardProposal[]> {
 ## 10. Monitoring and Observability
 
 ### Metrics to Track
+
 - Request count (total, success, failure)
 - Response time (avg, p50, p95, p99)
 - Error rate by error type
@@ -739,6 +783,7 @@ async generateFlashcards(sourceText: string): Promise<FlashcardProposal[]> {
 - Cost per request
 
 ### Logging
+
 ```typescript
 private logRequest(payload: RequestPayload, duration: number, success: boolean): void {
   console.log({

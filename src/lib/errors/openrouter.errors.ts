@@ -16,7 +16,10 @@ export class ApiTimeoutError extends Error {
 }
 
 export class InvalidResponseError extends Error {
-  constructor(message: string, public response?: string) {
+  constructor(
+    message: string,
+    public response?: string
+  ) {
     super(message);
     this.name = 'InvalidResponseError';
   }

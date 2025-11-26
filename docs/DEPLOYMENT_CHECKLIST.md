@@ -5,6 +5,7 @@ Quick reference checklist for deploying 10xCards to production.
 ## Pre-deployment
 
 ### Code Quality
+
 - [ ] All unit tests pass (`npm run test`)
 - [ ] All E2E tests pass (`npm run test:e2e`)
 - [ ] Build completes successfully (`npm run build`)
@@ -13,6 +14,7 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] All commits pushed to GitHub (`git status`)
 
 ### Production Supabase Setup
+
 - [ ] Production Supabase project created
 - [ ] Database migrations applied (see [PRODUCTION_SUPABASE.md](./PRODUCTION_SUPABASE.md))
 - [ ] RLS policies enabled on all tables
@@ -22,6 +24,7 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] Test user created for smoke testing
 
 ### Environment Variables Prepared
+
 - [ ] `PUBLIC_SUPABASE_URL` (production)
 - [ ] `PUBLIC_SUPABASE_ANON_KEY` (production)
 - [ ] `SUPABASE_SERVICE_ROLE_KEY` (production)
@@ -29,6 +32,7 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] All credentials saved securely (password manager)
 
 ### Documentation
+
 - [ ] README.md updated with production URL
 - [ ] Deployment documentation reviewed
 - [ ] Team notified of deployment
@@ -36,6 +40,7 @@ Quick reference checklist for deploying 10xCards to production.
 ## Cloudflare Pages Setup
 
 ### Account & Project
+
 - [ ] Cloudflare account created (free tier OK)
 - [ ] GitHub repository connected to Cloudflare Pages
 - [ ] Project created with correct settings:
@@ -45,11 +50,13 @@ Quick reference checklist for deploying 10xCards to production.
   - Node version: `20`
 
 ### Environment Variables
+
 - [ ] All production environment variables added
 - [ ] Sensitive keys marked as encrypted
 - [ ] Preview environment variables configured (optional)
 
 ### Initial Deployment
+
 - [ ] First deployment triggered
 - [ ] Build logs reviewed for errors
 - [ ] Deployment successful (green checkmark)
@@ -57,6 +64,7 @@ Quick reference checklist for deploying 10xCards to production.
 ## Post-deployment Verification
 
 ### Functional Testing
+
 - [ ] Homepage loads correctly
 - [ ] Register new test account
 - [ ] Verify email confirmation (check inbox/spam)
@@ -69,6 +77,7 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] Login again to verify persistence
 
 ### Technical Checks
+
 - [ ] No console errors in browser (F12 → Console)
 - [ ] All assets loading (images, CSS, JS)
 - [ ] API routes responding correctly
@@ -77,12 +86,14 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] Mobile responsive design verified
 
 ### Performance & SEO
+
 - [ ] Page load time < 3 seconds
 - [ ] Lighthouse score reviewed (aim for 90+)
 - [ ] Meta tags present (Open Graph, Twitter Card)
 - [ ] Favicon displays correctly
 
 ### Monitoring Setup
+
 - [ ] Cloudflare Analytics enabled
 - [ ] Error tracking configured (optional: Sentry)
 - [ ] Supabase monitoring dashboard reviewed
@@ -91,6 +102,7 @@ Quick reference checklist for deploying 10xCards to production.
 ## Security Verification
 
 ### Authentication
+
 - [ ] Password requirements enforced
 - [ ] Email verification working
 - [ ] Session management working correctly
@@ -98,11 +110,13 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] Protected routes require authentication
 
 ### Database Security
+
 - [ ] RLS policies tested (can't access other users' data)
 - [ ] Service role key not exposed to frontend
 - [ ] SQL injection protection verified
 
 ### General Security
+
 - [ ] HTTPS enabled (automatic with Cloudflare)
 - [ ] Environment variables not exposed in client
 - [ ] No sensitive data in error messages
@@ -111,6 +125,7 @@ Quick reference checklist for deploying 10xCards to production.
 ## Production Configuration
 
 ### Domain (If Applicable)
+
 - [ ] Custom domain added to Cloudflare Pages
 - [ ] DNS records configured
 - [ ] SSL certificate issued
@@ -118,11 +133,13 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] Redirect from www to apex (or vice versa)
 
 ### Caching & CDN
+
 - [ ] Cloudflare CDN enabled (automatic)
 - [ ] Cache rules configured for static assets
 - [ ] API routes not cached inappropriately
 
 ### Error Handling
+
 - [ ] 404 page displays correctly
 - [ ] 500 error page configured
 - [ ] API errors return meaningful messages
@@ -131,11 +148,13 @@ Quick reference checklist for deploying 10xCards to production.
 ## Continuous Deployment
 
 ### GitHub Integration
+
 - [ ] Automatic deployments on push to main
 - [ ] Preview deployments for branches/PRs
 - [ ] Build notifications configured (email/Slack)
 
 ### Rollback Plan
+
 - [ ] Know how to rollback deployment (Cloudflare UI)
 - [ ] Previous deployment accessible
 - [ ] Database backup available
@@ -143,12 +162,14 @@ Quick reference checklist for deploying 10xCards to production.
 ## Go-Live
 
 ### Final Checks
+
 - [ ] All checklist items above completed ✅
 - [ ] Team ready for launch
 - [ ] Support channels prepared
 - [ ] Monitoring dashboards open
 
 ### Launch
+
 - [ ] Announce launch (if applicable)
 - [ ] Monitor for first 30 minutes
 - [ ] Check error logs
@@ -156,6 +177,7 @@ Quick reference checklist for deploying 10xCards to production.
 - [ ] Respond to any issues immediately
 
 ### Post-Launch (First 24 Hours)
+
 - [ ] Monitor analytics for traffic
 - [ ] Check error rates in Cloudflare
 - [ ] Review Supabase usage
@@ -166,17 +188,20 @@ Quick reference checklist for deploying 10xCards to production.
 ## Ongoing Maintenance
 
 ### Daily
+
 - [ ] Check error logs
 - [ ] Monitor uptime (Cloudflare status)
 - [ ] Review user reports
 
 ### Weekly
+
 - [ ] Review analytics
 - [ ] Check database size/usage
 - [ ] Update dependencies (if needed)
 - [ ] Review and merge PRs
 
 ### Monthly
+
 - [ ] Backup production database
 - [ ] Review Supabase usage and costs
 - [ ] Review Cloudflare analytics
@@ -186,6 +211,7 @@ Quick reference checklist for deploying 10xCards to production.
 ## Emergency Procedures
 
 ### If Site Goes Down
+
 1. Check [Cloudflare Status](https://www.cloudflarestatus.com/)
 2. Check [Supabase Status](https://status.supabase.com/)
 3. Review recent deployments in Cloudflare
@@ -194,6 +220,7 @@ Quick reference checklist for deploying 10xCards to production.
 6. Notify users (if extended outage)
 
 ### If Database Issues
+
 1. Check Supabase dashboard for errors
 2. Review connection pool usage
 3. Check RLS policies
@@ -201,6 +228,7 @@ Quick reference checklist for deploying 10xCards to production.
 5. Restore from backup if needed
 
 ### If API Rate Limits Hit
+
 1. Review OpenRouter usage
 2. Implement request throttling
 3. Add user-facing rate limit messages

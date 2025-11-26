@@ -148,7 +148,9 @@ export function useFlashcardGeneration() {
   const saveEditProposal = useCallback((id: string, front: string, back: string) => {
     // Validate lengths
     if (front.length > VALIDATION.FLASHCARD_FRONT_MAX) {
-      throw new Error(`Front text must be no more than ${VALIDATION.FLASHCARD_FRONT_MAX} characters`);
+      throw new Error(
+        `Front text must be no more than ${VALIDATION.FLASHCARD_FRONT_MAX} characters`
+      );
     }
     if (back.length > VALIDATION.FLASHCARD_BACK_MAX) {
       throw new Error(`Back text must be no more than ${VALIDATION.FLASHCARD_BACK_MAX} characters`);
@@ -191,9 +193,7 @@ export function useFlashcardGeneration() {
 
   const saveFlashcards = useCallback(
     async (saveAll: boolean = false) => {
-      const proposalsToSave = saveAll
-        ? state.proposals
-        : state.proposals.filter((p) => p.accepted);
+      const proposalsToSave = saveAll ? state.proposals : state.proposals.filter((p) => p.accepted);
 
       if (proposalsToSave.length === 0) {
         setState((prev) => ({
@@ -282,9 +282,10 @@ export function useFlashcardGeneration() {
     rejected: 0, // Rejected proposals are removed from the list
   };
 
-  const canGenerate = state.sourceText.length >= VALIDATION.SOURCE_TEXT_MIN &&
-                      state.sourceText.length <= VALIDATION.SOURCE_TEXT_MAX &&
-                      !state.isGenerating;
+  const canGenerate =
+    state.sourceText.length >= VALIDATION.SOURCE_TEXT_MIN &&
+    state.sourceText.length <= VALIDATION.SOURCE_TEXT_MAX &&
+    !state.isGenerating;
 
   const canSave = state.proposals.length > 0 && !state.isSaving;
 

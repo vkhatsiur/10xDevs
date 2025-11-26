@@ -76,18 +76,30 @@ export function LoginForm() {
       </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md" data-testid="login-error-message">
+        <div
+          className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md"
+          data-testid="login-error-message"
+        >
           {error}
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={isLoading} data-testid="login-submit-button">
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isLoading}
+        data-testid="login-submit-button"
+      >
         {isLoading ? 'Logging in...' : 'Log in'}
       </Button>
 
       <p className="text-sm text-center text-gray-600">
         Don't have an account?{' '}
-        <a href="/register" className="text-blue-600 hover:underline" data-testid="login-register-link">
+        <a
+          href="/register"
+          className="text-blue-600 hover:underline"
+          data-testid="login-register-link"
+        >
           Sign up
         </a>
       </p>

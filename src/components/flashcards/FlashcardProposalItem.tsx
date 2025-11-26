@@ -61,9 +61,7 @@ export function FlashcardProposalItem({
   return (
     <Card
       className={`transition-all ${
-        proposal.accepted
-          ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20'
-          : ''
+        proposal.accepted ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20' : ''
       }`}
     >
       <CardHeader className="pb-3">
@@ -84,7 +82,9 @@ export function FlashcardProposalItem({
         {proposal.editing ? (
           <>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Front ({editFront.length}/{VALIDATION.FLASHCARD_FRONT_MAX})</label>
+              <label className="text-sm font-medium">
+                Front ({editFront.length}/{VALIDATION.FLASHCARD_FRONT_MAX})
+              </label>
               <Textarea
                 value={editFront}
                 onChange={(e) => setEditFront(e.target.value)}
@@ -94,7 +94,9 @@ export function FlashcardProposalItem({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Back ({editBack.length}/{VALIDATION.FLASHCARD_BACK_MAX})</label>
+              <label className="text-sm font-medium">
+                Back ({editBack.length}/{VALIDATION.FLASHCARD_BACK_MAX})
+              </label>
               <Textarea
                 value={editBack}
                 onChange={(e) => setEditBack(e.target.value)}
@@ -103,9 +105,7 @@ export function FlashcardProposalItem({
               />
             </div>
 
-            {editError && (
-              <p className="text-sm text-red-600">{editError}</p>
-            )}
+            {editError && <p className="text-sm text-red-600">{editError}</p>}
           </>
         ) : (
           <>
@@ -125,20 +125,11 @@ export function FlashcardProposalItem({
       <CardFooter className="pt-3 border-t">
         {proposal.editing ? (
           <div className="flex gap-2 w-full">
-            <Button
-              size="sm"
-              onClick={handleSaveEdit}
-              className="flex-1"
-            >
+            <Button size="sm" onClick={handleSaveEdit} className="flex-1">
               <Save className="mr-2 h-4 w-4" />
               Save
             </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleCancelEdit}
-              className="flex-1"
-            >
+            <Button size="sm" variant="outline" onClick={handleCancelEdit} className="flex-1">
               <XCircle className="mr-2 h-4 w-4" />
               Cancel
             </Button>
@@ -154,18 +145,10 @@ export function FlashcardProposalItem({
               <Check className="mr-2 h-4 w-4" />
               {proposal.accepted ? 'Accepted' : 'Accept'}
             </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onStartEdit(proposal.id)}
-            >
+            <Button size="sm" variant="outline" onClick={() => onStartEdit(proposal.id)}>
               <Edit2 className="h-4 w-4" />
             </Button>
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => onReject(proposal.id)}
-            >
+            <Button size="sm" variant="destructive" onClick={() => onReject(proposal.id)}>
               <X className="h-4 w-4" />
             </Button>
           </div>

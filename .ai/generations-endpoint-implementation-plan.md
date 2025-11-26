@@ -5,6 +5,7 @@
 The `POST /api/generations` endpoint initiates the AI generation process to create flashcard proposals based on user-provided text.
 
 **Key Characteristics**:
+
 - Accepts source text (1000-10000 characters)
 - Calls external AI service (OpenRouter) to generate proposals
 - Creates generation record with metadata
@@ -18,9 +19,11 @@ The `POST /api/generations` endpoint initiates the AI generation process to crea
 ## 2. Request Details
 
 ### HTTP Method
+
 `POST`
 
 ### URL Structure
+
 `/api/generations`
 
 ### Request Body
@@ -34,6 +37,7 @@ The `POST /api/generations` endpoint initiates the AI generation process to crea
 ### Required Parameters
 
 #### `source_text` (string)
+
 - **Required**: Yes
 - **Type**: string
 - **Min length**: 1000 characters
@@ -41,6 +45,7 @@ The `POST /api/generations` endpoint initiates the AI generation process to crea
 - **Description**: Source text from which flashcards will be generated
 
 ### Optional Parameters
+
 None
 
 ---
@@ -88,6 +93,7 @@ interface GenerationErrorLog {
 **Status Code**: `201 Created`
 
 **Response Body**:
+
 ```json
 {
   "generation_id": 123,
@@ -117,6 +123,7 @@ interface GenerationErrorLog {
 ### Error Responses
 
 #### 400 Bad Request
+
 **Cause**: Invalid source text length
 
 ```json
@@ -132,6 +139,7 @@ interface GenerationErrorLog {
 ```
 
 #### 401 Unauthorized
+
 **Cause**: Missing or invalid authentication token
 
 ```json
@@ -142,6 +150,7 @@ interface GenerationErrorLog {
 ```
 
 #### 500 Internal Server Error
+
 **Cause**: AI service error or database error
 
 ```json
@@ -212,27 +221,32 @@ If AI service fails:
 ## 6. Security Considerations
 
 ### Authentication
+
 - **Requirement**: User must be authenticated
 - **Implementation**: Verify Supabase Auth token (Module 3)
 - **MVP**: Use hardcoded test user ID
 
 ### Input Validation
+
 - **Length validation**: Enforce 1000-10000 character limit
 - **Sanitization**: Clean text before sending to AI
 - **SQL Injection**: Use parameterized queries
 - **XSS Protection**: Sanitize AI-generated content
 
 ### Privacy
+
 - **Source text**: NEVER stored in database
 - **Hashing**: Use SHA-256 hash for duplicate detection
 - **Error logs**: Don't include source_text, only hash and length
 
 ### API Key Protection
+
 - **OpenRouter API key**: Store in environment variables
 - **Never expose**: Don't include in client-side code
 - **Rotation**: Regular key rotation (production)
 
 ### Rate Limiting (Module 3)
+
 - **Generation limit**: 10 per hour per user
 - **Cost control**: Prevent API abuse
 - **Monitoring**: Track usage patterns
@@ -275,17 +289,18 @@ If AI service fails:
 
 Error codes logged to database:
 
-| Error Code | Description | Recovery |
-|------------|-------------|----------|
-| `API_TIMEOUT` | Request timeout (> 60s) | Retry with same text |
-| `API_RATE_LIMIT` | OpenRouter rate limit exceeded | Wait and retry later |
-| `API_AUTH_ERROR` | Invalid API key | Check configuration |
-| `INVALID_JSON` | AI returned invalid JSON | Retry or adjust prompt |
-| `EMPTY_RESPONSE` | AI returned empty response | Retry |
-| `HTTP_4XX` | OpenRouter client error | Check request format |
-| `HTTP_5XX` | OpenRouter server error | Retry later |
+| Error Code       | Description                    | Recovery               |
+| ---------------- | ------------------------------ | ---------------------- |
+| `API_TIMEOUT`    | Request timeout (> 60s)        | Retry with same text   |
+| `API_RATE_LIMIT` | OpenRouter rate limit exceeded | Wait and retry later   |
+| `API_AUTH_ERROR` | Invalid API key                | Check configuration    |
+| `INVALID_JSON`   | AI returned invalid JSON       | Retry or adjust prompt |
+| `EMPTY_RESPONSE` | AI returned empty response     | Retry                  |
+| `HTTP_4XX`       | OpenRouter client error        | Check request format   |
+| `HTTP_5XX`       | OpenRouter server error        | Retry later            |
 
 ### Database Errors (500)
+
 - Failed to create generation record
 - Failed to insert error log
 - Connection timeout
@@ -310,11 +325,13 @@ Error codes logged to database:
 ## 8. Performance Considerations
 
 ### Timeout Configuration
+
 - **OpenRouter API timeout**: 60 seconds
 - **Reason**: AI generation can take time for long texts
 - **Fallback**: Return timeout error if exceeded
 
 ### Asynchronous Processing (Future)
+
 - For MVP: Synchronous processing (wait for AI response)
 - Module 3+: Consider background job processing
   - User submits request
@@ -323,12 +340,14 @@ Error codes logged to database:
   - Notification when ready
 
 ### Caching (Future)
+
 - **Hash-based cache**: If source_text_hash exists
   - Check if recent generation exists (< 24 hours)
   - Return cached proposals
   - Save API costs
 
 ### Monitoring
+
 - Track generation duration (avg, p50, p95, p99)
 - Monitor error rates by error code
 - Alert on unusual patterns
@@ -344,24 +363,27 @@ npm install zod  # For validation
 ```
 
 ### Step 2: Create Validation Schema
+
 **File**: `src/lib/validators/generation.validator.ts`
 
 ```typescript
 import { z } from 'zod';
 
 export const generateFlashcardsSchema = z.object({
-  source_text: z.string()
-    .min(1000, "Source text must be at least 1000 characters")
-    .max(10000, "Source text must be 10000 characters or less")
+  source_text: z
+    .string()
+    .min(1000, 'Source text must be at least 1000 characters')
+    .max(10000, 'Source text must be 10000 characters or less'),
 });
 
 export type GenerateFlashcardsInput = z.infer<typeof generateFlashcardsSchema>;
 ```
 
 ### Step 3: Create OpenRouter Service
+
 **File**: `src/lib/services/openrouter.service.ts`
 
-```typescript
+````typescript
 interface FlashcardProposal {
   front: string;
   back: string;
@@ -386,7 +408,7 @@ export class OpenRouterService {
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'https://10xcards.app',
         'X-Title': '10xCards',
@@ -442,9 +464,7 @@ ${sourceText}`;
     // Remove markdown code blocks if present
     let jsonContent = content.trim();
     if (jsonContent.startsWith('```json')) {
-      jsonContent = jsonContent
-        .replace(/```json\n?/g, '')
-        .replace(/```\n?/g, '');
+      jsonContent = jsonContent.replace(/```json\n?/g, '').replace(/```\n?/g, '');
     } else if (jsonContent.startsWith('```')) {
       jsonContent = jsonContent.replace(/```\n?/g, '');
     }
@@ -462,9 +482,10 @@ ${sourceText}`;
     }));
   }
 }
-```
+````
 
 ### Step 4: Create Generation Service
+
 **File**: `src/lib/services/generation.service.ts`
 
 ```typescript
@@ -513,7 +534,7 @@ export class GenerationService {
 
       return {
         generation_id: generation.id,
-        flashcards_proposals: proposals.map(p => ({
+        flashcards_proposals: proposals.map((p) => ({
           ...p,
           source: 'ai-full' as const,
         })),
@@ -523,12 +544,7 @@ export class GenerationService {
       };
     } catch (error) {
       // Log error to database
-      await this.logError(
-        userId,
-        sourceTextHash,
-        sourceTextLength,
-        error
-      );
+      await this.logError(userId, sourceTextHash, sourceTextLength, error);
 
       throw error;
     }
@@ -568,6 +584,7 @@ export class GenerationService {
 ```
 
 ### Step 5: Create API Endpoint
+
 **File**: `src/pages/api/generations/index.ts`
 
 ```typescript
@@ -603,10 +620,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Generate flashcards
     const generationService = new GenerationService();
-    const result = await generationService.generateFlashcards(
-      validation.data.source_text,
-      userId
-    );
+    const result = await generationService.generateFlashcards(validation.data.source_text, userId);
 
     return new Response(JSON.stringify(result), {
       status: 201,
@@ -626,6 +640,7 @@ export const POST: APIRoute = async ({ request }) => {
 ```
 
 ### Step 6: Testing
+
 1. **Unit tests**: Test OpenRouterService parsing
 2. **Integration tests**: Test GenerationService
 3. **Manual tests**: Use curl with 1000+ character text
@@ -668,23 +683,27 @@ Expected: 500 error
 ## 11. Future Enhancements (Module 3+)
 
 ### Background Processing
+
 - Queue generation requests
 - Return job ID immediately
 - Poll for status
 - WebSocket for real-time updates
 
 ### Caching
+
 - Cache by source_text_hash
 - TTL: 24 hours
 - Save API costs
 
 ### Advanced AI Features
+
 - Custom number of flashcards (user preference)
 - Difficulty levels
 - Topic/category detection
 - Multi-language support
 
 ### Analytics
+
 - Track most common source_text_length
 - Monitor generation success rate
 - Identify optimal prompt variations

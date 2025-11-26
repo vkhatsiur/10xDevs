@@ -9,10 +9,7 @@ interface FlashcardInputProps {
 /**
  * Input component for entering text to generate flashcards
  */
-export const FlashcardInput: FC<FlashcardInputProps> = ({
-  onGenerate,
-  isLoading = false,
-}) => {
+export const FlashcardInput: FC<FlashcardInputProps> = ({ onGenerate, isLoading = false }) => {
   const [text, setText] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
@@ -57,10 +54,7 @@ export const FlashcardInput: FC<FlashcardInputProps> = ({
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-4">
       <div className="space-y-2">
-        <label
-          htmlFor="flashcard-text"
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor="flashcard-text" className="block text-sm font-medium text-gray-700">
           Enter text to generate flashcards
         </label>
 

@@ -27,14 +27,13 @@ export class GeneratePage {
     await expect(manualTab).toBeVisible({ timeout: 10_000 });
 
     await this.page.waitForTimeout(2000);
-    await manualTab.click();    
+    await manualTab.click();
     await expect(manualTab).toHaveAttribute('data-state', 'active', {
       timeout: 10_000,
     });
 
     await expect(this.manualForm).toBeVisible({ timeout: 10_000 });
   }
-
 
   async fillFlashcard(index: number, front: string, back: string) {
     const frontInput = this.page.getByTestId(`flashcard-front-${index}`);

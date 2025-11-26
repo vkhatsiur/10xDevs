@@ -66,9 +66,9 @@ describe('FlashcardService', () => {
         { front: 'Q1', back: 'A1', source: 'manual' as const, generation_id: null },
       ];
 
-      await expect(
-        service.createFlashcards(flashcards, 'user-123')
-      ).rejects.toThrow('Failed to create flashcards: Database error');
+      await expect(service.createFlashcards(flashcards, 'user-123')).rejects.toThrow(
+        'Failed to create flashcards: Database error'
+      );
     });
 
     it('should add user_id to all flashcards', async () => {

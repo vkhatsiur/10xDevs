@@ -20,9 +20,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const protectedPaths = ['/generate', '/flashcards', '/profile'];
 
   // Check if current path is protected
-  const isProtectedPath = protectedPaths.some((path) =>
-    context.url.pathname.startsWith(path)
-  );
+  const isProtectedPath = protectedPaths.some((path) => context.url.pathname.startsWith(path));
 
   // Redirect to login if accessing protected route without authentication
   if (isProtectedPath && !user) {
@@ -31,9 +29,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Redirect to /generate if already logged in and trying to access auth pages
   const authPaths = ['/login', '/register'];
-  const isAuthPath = authPaths.some((path) =>
-    context.url.pathname.startsWith(path)
-  );
+  const isAuthPath = authPaths.some((path) => context.url.pathname.startsWith(path));
 
   if (isAuthPath && user) {
     return context.redirect('/generate');

@@ -52,10 +52,7 @@ export const test = base.extend<Fixtures>({
   authenticatedPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await loginPage.login(
-      process.env.E2E_TEST_EMAIL!,
-      process.env.E2E_TEST_PASSWORD!
-    );
+    await loginPage.login(process.env.E2E_TEST_EMAIL!, process.env.E2E_TEST_PASSWORD!);
     await loginPage.expectRedirectToGenerate();
     await use(page);
   },

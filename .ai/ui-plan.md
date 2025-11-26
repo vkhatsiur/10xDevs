@@ -74,12 +74,14 @@ The user interface is built around the flashcard generation view, which will be 
 ## 4. Layout and Navigation Structure
 
 ### Module 2 MVP Navigation
+
 - **Main Navigation:** Available as top menu in page layout.
 - **Navigation Elements:** Links to views: "Generate Flashcards", "My Flashcards"
 - **Responsiveness:** In mobile view, navigation transforms into hamburger menu, enabling easy access to other views.
 - **Flow:** Navigation enables seamless transitions between views, maintaining user context and session data.
 
 ### Future Navigation (Module 3+)
+
 - Will include: "Review Session", "Profile", and logout button
 - Authentication required for access
 
@@ -96,6 +98,7 @@ The user interface is built around the flashcard generation view, which will be 
 ### shadcn/ui Components to Install
 
 Based on the implementation plan, we'll need:
+
 - `button` - For all interactive buttons
 - `textarea` - For text input area
 - `card` - For flashcard proposals display
@@ -131,6 +134,7 @@ Based on the implementation plan, we'll need:
 ## 8. Implementation Priorities (Module 2)
 
 ### Phase 1: Flashcard Generation View (Lesson 2x5)
+
 1. Initialize shadcn/ui ✅
 2. Install required components
 3. Create FlashcardGenerator view
@@ -141,12 +145,14 @@ Based on the implementation plan, we'll need:
 8. Implement batch save to POST /api/flashcards
 
 ### Phase 2: Flashcard List View (Future)
+
 1. Create FlashcardList view
 2. Connect to GET /api/flashcards endpoint
 3. Implement edit modal
 4. Implement delete functionality with confirmation
 
 ### Phase 3: Polish and Testing (Future)
+
 1. Add toast notifications
 2. Improve error handling
 3. Test responsive design

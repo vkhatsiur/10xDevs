@@ -10,7 +10,8 @@ interface TextInputAreaProps {
 
 export function TextInputArea({ value, onChange, disabled, error }: TextInputAreaProps) {
   const charCount = value.length;
-  const isValid = charCount >= VALIDATION.SOURCE_TEXT_MIN && charCount <= VALIDATION.SOURCE_TEXT_MAX;
+  const isValid =
+    charCount >= VALIDATION.SOURCE_TEXT_MIN && charCount <= VALIDATION.SOURCE_TEXT_MAX;
   const isTooShort = charCount > 0 && charCount < VALIDATION.SOURCE_TEXT_MIN;
   const isTooLong = charCount > VALIDATION.SOURCE_TEXT_MAX;
 
@@ -25,13 +26,14 @@ export function TextInputArea({ value, onChange, disabled, error }: TextInputAre
             isTooShort
               ? 'text-orange-600'
               : isTooLong
-              ? 'text-red-600'
-              : isValid
-              ? 'text-green-600'
-              : 'text-muted-foreground'
+                ? 'text-red-600'
+                : isValid
+                  ? 'text-green-600'
+                  : 'text-muted-foreground'
           }`}
         >
-          {charCount.toLocaleString()} / {VALIDATION.SOURCE_TEXT_MIN.toLocaleString()} - {VALIDATION.SOURCE_TEXT_MAX.toLocaleString()}
+          {charCount.toLocaleString()} / {VALIDATION.SOURCE_TEXT_MIN.toLocaleString()} -{' '}
+          {VALIDATION.SOURCE_TEXT_MAX.toLocaleString()}
         </span>
       </div>
 

@@ -36,7 +36,8 @@ const flashcardSchema = z
       return true;
     },
     {
-      message: 'generation_id is required for ai-full/ai-edited source and must be null for manual source',
+      message:
+        'generation_id is required for ai-full/ai-edited source and must be null for manual source',
       path: ['generation_id'],
     }
   );

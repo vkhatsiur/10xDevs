@@ -12,6 +12,7 @@
 This document describes the authentication architecture for 10xCards using **Supabase Auth**. The implementation will replace the current test user ID (`00000000-0000-0000-0000-000000000001`) with a fully functional authentication system.
 
 ### Key Decisions
+
 - ✅ **Supabase Auth** instead of custom authentication (security, speed, maintenance)
 - ✅ **Email/Password** authentication (no social login for MVP)
 - ✅ **JWT-based sessions** with automatic token refresh
@@ -23,11 +24,13 @@ This document describes the authentication architecture for 10xCards using **Sup
 ## 2. Updated User Stories
 
 ### US-005: User Registration
+
 **As** a new user,
 **I want to** create an account with email and password,
 **So that** I can save my flashcards and access them later.
 
 **Acceptance Criteria:**
+
 - Registration page at `/register`
 - Email and password fields with validation
 - Password confirmation field
@@ -37,11 +40,13 @@ This document describes the authentication architecture for 10xCards using **Sup
 - Password strength requirements (min 8 chars)
 
 ### US-006: User Login
+
 **As** a registered user,
 **I want to** log in with my credentials,
 **So that** I can access my flashcards.
 
 **Acceptance Criteria:**
+
 - Login page at `/login`
 - Email and password fields
 - "Remember me" functionality (JWT stored in cookie)
@@ -51,22 +56,26 @@ This document describes the authentication architecture for 10xCards using **Sup
 - Link to registration page
 
 ### US-007: User Logout
+
 **As** a logged-in user,
 **I want to** log out of the application,
 **So that** my data is secure on shared devices.
 
 **Acceptance Criteria:**
+
 - Logout button in main navigation
 - Clear session and JWT token
 - Redirect to login page after logout
 - No access to protected pages after logout
 
 ### US-008: Protected Routes
+
 **As** the system,
 **I want to** protect flashcard-related pages,
 **So that** only authenticated users can access their data.
 
 **Acceptance Criteria:**
+
 - `/generate` requires authentication
 - `/flashcards` requires authentication
 - Unauthenticated users redirected to `/login`
@@ -74,11 +83,13 @@ This document describes the authentication architecture for 10xCards using **Sup
 - Automatic token refresh before expiration
 
 ### US-009: Password Recovery (Optional for MVP)
+
 **As** a user who forgot password,
 **I want to** reset my password via email,
 **So that** I can regain access to my account.
 
 **Acceptance Criteria:**
+
 - Password reset page at `/reset-password`
 - Email input for reset link
 - Supabase sends reset email
@@ -143,6 +154,7 @@ This document describes the authentication architecture for 10xCards using **Sup
 **No changes required!** Supabase Auth uses its own `auth.users` table.
 
 Our existing tables already have `user_id` UUID columns:
+
 - ✅ `flashcards.user_id` → references auth.users(id)
 - ✅ `generations.user_id` → references auth.users(id)
 - ✅ `generation_error_logs.user_id` → references auth.users(id)
@@ -205,10 +217,12 @@ WITH CHECK (auth.uid() = user_id);
 ### Phase 1: Supabase Client Setup
 
 **Files to Create:**
+
 - `src/lib/supabase.client.ts` - Browser client
 - `src/lib/supabase.server.ts` - Server client
 
 **supabase.client.ts:**
+
 ```typescript
 import { createClient } from '@supabase/supabase-js';
 
@@ -219,6 +233,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 ```
 
 **supabase.server.ts:**
+
 ```typescript
 import { createClient } from '@supabase/supabase-js';
 
@@ -250,7 +265,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = getServerSupabase(context.cookies);
 
   // Get user session
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   // Attach user to context
   context.locals.user = session?.user ?? null;
@@ -258,9 +275,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Protected routes
   const protectedPaths = ['/generate', '/flashcards', '/profile'];
-  const isProtected = protectedPaths.some(path =>
-    context.url.pathname.startsWith(path)
-  );
+  const isProtected = protectedPaths.some((path) => context.url.pathname.startsWith(path));
 
   // Redirect to login if not authenticated
   if (isProtected && !session) {
@@ -274,12 +289,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
 ### Phase 3: API Endpoints
 
 **Files to Create:**
+
 - `src/pages/api/auth/login.ts`
 - `src/pages/api/auth/register.ts`
 - `src/pages/api/auth/logout.ts`
 - `src/pages/api/auth/reset-password.ts` (optional)
 
 **login.ts:**
+
 ```typescript
 import type { APIRoute } from 'astro';
 import { getServerSupabase } from '../../../lib/supabase.server';
@@ -315,6 +332,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 ```
 
 **register.ts:**
+
 ```typescript
 import type { APIRoute } from 'astro';
 import { getServerSupabase } from '../../../lib/supabase.server';
@@ -341,12 +359,15 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       });
     }
 
-    return new Response(JSON.stringify({
-      message: 'Check your email to confirm your account',
-      user: data.user
-    }), {
-      status: 201,
-    });
+    return new Response(
+      JSON.stringify({
+        message: 'Check your email to confirm your account',
+        user: data.user,
+      }),
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Invalid request' }), {
       status: 400,
@@ -356,6 +377,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 ```
 
 **logout.ts:**
+
 ```typescript
 import type { APIRoute } from 'astro';
 import { getServerSupabase } from '../../../lib/supabase.server';
@@ -376,6 +398,7 @@ export const POST: APIRoute = async ({ cookies }) => {
 ### Phase 4: UI Components
 
 **Files to Create:**
+
 - `src/pages/login.astro`
 - `src/pages/register.astro`
 - `src/components/auth/LoginForm.tsx`
@@ -383,6 +406,7 @@ export const POST: APIRoute = async ({ cookies }) => {
 - `src/components/layout/Navigation.tsx` (or update existing)
 
 **shadcn Components Needed:**
+
 - `input` - for email/password fields
 - `label` - for form labels
 - `button` - already installed ✅
@@ -420,6 +444,7 @@ Apply RLS policies (see section 3.3 above).
 ### 5.1 Environment Variables
 
 **Required in `.env`:**
+
 ```env
 PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
 PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
@@ -427,7 +452,8 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 ```
 
 **Important:**
-- ✅ Anon key is safe to expose (PUBLIC_)
+
+- ✅ Anon key is safe to expose (PUBLIC\_)
 - ❌ Service role key must NEVER be exposed to client
 - ✅ Use service role only in server-side code
 
@@ -455,6 +481,7 @@ Already handled by Supabase and Astro.
 ### Manual Testing Checklist
 
 **Registration:**
+
 - [ ] Can create account with valid email/password
 - [ ] Cannot register with invalid email
 - [ ] Cannot register with weak password
@@ -462,6 +489,7 @@ Already handled by Supabase and Astro.
 - [ ] Redirected to login after registration
 
 **Login:**
+
 - [ ] Can log in with correct credentials
 - [ ] Cannot log in with wrong password
 - [ ] Cannot log in with non-existent email
@@ -469,18 +497,21 @@ Already handled by Supabase and Astro.
 - [ ] Redirected to /generate after login
 
 **Session:**
+
 - [ ] Session persists across page reloads
 - [ ] Can access protected routes when logged in
 - [ ] Cannot access protected routes when logged out
 - [ ] Redirected to login when accessing protected route
 
 **Logout:**
+
 - [ ] Can log out successfully
 - [ ] Session cleared after logout
 - [ ] Redirected to login page
 - [ ] Cannot access protected routes after logout
 
 **Data Isolation:**
+
 - [ ] User A cannot see User B's flashcards
 - [ ] User A cannot modify User B's data
 - [ ] RLS policies working correctly
@@ -508,6 +539,7 @@ Already handled by Supabase and Astro.
 15. ✅ Commit and deploy
 
 ### Estimated Time
+
 - **Setup + API:** 2-3 hours
 - **UI Components:** 2-3 hours
 - **Integration + Testing:** 2-3 hours
@@ -546,11 +578,13 @@ Access auth logs at: `https://supabase.com/dashboard/project/{project_id}/auth/u
 ## 10. References
 
 ### Documentation
+
 - Supabase Auth: https://supabase.com/docs/guides/auth
 - Astro SSR: https://docs.astro.build/en/guides/server-side-rendering/
 - JWT: https://jwt.io/
 
 ### Course Resources
+
 - 10xRules.ai Prompts: https://10xrules.ai/prompts
 - Module 3, Lesson 3x1: Authentication Implementation
 

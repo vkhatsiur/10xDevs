@@ -34,18 +34,12 @@ export function ManualFlashcardForm() {
   };
 
   const updateCard = (id: string, field: 'front' | 'back', value: string) => {
-    setCards(
-      cards.map((card) =>
-        card.id === id ? { ...card, [field]: value } : card
-      )
-    );
+    setCards(cards.map((card) => (card.id === id ? { ...card, [field]: value } : card)));
   };
 
   const handleSave = async () => {
     // Validate all cards
-    const emptyCards = cards.filter(
-      (card) => !card.front.trim() || !card.back.trim()
-    );
+    const emptyCards = cards.filter((card) => !card.front.trim() || !card.back.trim());
 
     if (emptyCards.length > 0) {
       toast.error('All flashcards must have both front and back text');
@@ -53,9 +47,7 @@ export function ManualFlashcardForm() {
     }
 
     // Validate length constraints
-    const invalidCards = cards.filter(
-      (card) => card.front.length > 200 || card.back.length > 500
-    );
+    const invalidCards = cards.filter((card) => card.front.length > 200 || card.back.length > 500);
 
     if (invalidCards.length > 0) {
       toast.error('Front text max 200 chars, back text max 500 chars');
@@ -96,9 +88,7 @@ export function ManualFlashcardForm() {
     }
   };
 
-  const hasValidCards = cards.some(
-    (card) => card.front.trim() && card.back.trim()
-  );
+  const hasValidCards = cards.some((card) => card.front.trim() && card.back.trim());
 
   return (
     <div className="space-y-6" data-testid="manual-flashcard-form">
@@ -123,9 +113,7 @@ export function ManualFlashcardForm() {
             data-testid={`flashcard-${index}`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-500">
-                Card {index + 1}
-              </span>
+              <span className="text-sm font-medium text-gray-500">Card {index + 1}</span>
               {cards.length > 1 && (
                 <Button
                   onClick={() => removeCard(card.id)}
@@ -153,9 +141,7 @@ export function ManualFlashcardForm() {
                 disabled={isSaving}
                 data-testid={`flashcard-front-${index}`}
               />
-              <p className="text-xs text-gray-500">
-                {card.front.length}/200 characters
-              </p>
+              <p className="text-xs text-gray-500">{card.front.length}/200 characters</p>
             </div>
 
             <div className="space-y-2">
@@ -173,9 +159,7 @@ export function ManualFlashcardForm() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed resize-y"
                 data-testid={`flashcard-back-${index}`}
               />
-              <p className="text-xs text-gray-500">
-                {card.back.length}/500 characters
-              </p>
+              <p className="text-xs text-gray-500">{card.back.length}/500 characters</p>
             </div>
           </div>
         ))}
@@ -196,8 +180,8 @@ export function ManualFlashcardForm() {
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-800">
-          <strong>Tip:</strong> Manual flashcards are great for specific terms,
-          formulas, or when you want full control over the content.
+          <strong>Tip:</strong> Manual flashcards are great for specific terms, formulas, or when
+          you want full control over the content.
         </p>
       </div>
     </div>

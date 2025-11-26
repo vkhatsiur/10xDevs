@@ -41,10 +41,12 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 ### 1. Validators (28 tests)
 
 **Files:**
+
 - `src/lib/validators/flashcard.validator.test.ts` (17 tests)
 - `src/lib/validators/generation.validator.test.ts` (11 tests)
 
 **Coverage:**
+
 - ✅ Flashcard validation (front/back length, source enum)
 - ✅ Generation validation (source_text 1000-10000 chars)
 - ✅ Boundary testing (999, 1000, 10000, 10001)
@@ -52,6 +54,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 - ✅ source/generation_id relationship validation
 
 **Key Edge Cases:**
+
 - Empty strings, whitespace
 - Maximum length boundaries
 - Invalid source values
@@ -65,6 +68,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 **File:** `src/lib/services/openrouter.service.test.ts`
 
 **Coverage:**
+
 - ✅ Constructor and configuration
 - ✅ Successful flashcard generation
 - ✅ Markdown code block handling
@@ -76,6 +80,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 - ✅ API key authorization
 
 **Key Edge Cases:**
+
 - API timeout (skipped - needs async timing adjustments)
 - Rate limiting (429)
 - Server errors (500)
@@ -85,6 +90,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 - Markdown-wrapped JSON
 
 **Mocking Strategy:**
+
 - fetch API fully mocked
 - Response shapes validated
 - Retry attempts counted
@@ -97,6 +103,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 **File:** `src/lib/services/flashcard.service.test.ts`
 
 **Coverage:**
+
 - ✅ createFlashcards (batch insert with user_id)
 - ✅ getFlashcards (retrieve all user's flashcards)
 - ✅ getFlashcardById (single retrieval)
@@ -105,6 +112,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 - ✅ verifyGenerationOwnership (security check)
 
 **Key Edge Cases:**
+
 - Database errors
 - Empty results
 - Missing flashcards (null returns)
@@ -113,6 +121,7 @@ This document outlines the testing strategy for 10xCards, focusing on HIGH prior
 - Ownership verification
 
 **Mocking Strategy:**
+
 - Supabase client fully mocked
 - Query builder chain mocked
 - Database errors simulated
@@ -130,13 +139,13 @@ Duration:   ~26 seconds
 
 ### Coverage by Component
 
-| Component | Tests | Status | Priority |
-|-----------|-------|--------|----------|
-| Flashcard Validator | 17 | ✅ Pass | HIGH |
-| Generation Validator | 11 | ✅ Pass | HIGH |
-| OpenRouterService | 19 | ✅ Pass | HIGH |
-| FlashcardService | 14 | ✅ Pass | HIGH |
-| **Total** | **61** | **✅** | **HIGH** |
+| Component            | Tests  | Status  | Priority |
+| -------------------- | ------ | ------- | -------- |
+| Flashcard Validator  | 17     | ✅ Pass | HIGH     |
+| Generation Validator | 11     | ✅ Pass | HIGH     |
+| OpenRouterService    | 19     | ✅ Pass | HIGH     |
+| FlashcardService     | 14     | ✅ Pass | HIGH     |
+| **Total**            | **61** | **✅**  | **HIGH** |
 
 ---
 
@@ -145,12 +154,14 @@ Duration:   ~26 seconds
 ### Setup Files
 
 **vitest.config.ts:**
+
 - jsdom environment
 - Coverage configuration (v8 provider)
 - Path aliases (@/ → src/)
 - Exclusions (pages, layouts, ui components, generated types)
 
 **src/test/setup.ts:**
+
 - @testing-library/jest-dom matchers
 - Automatic cleanup after each test
 - Environment variable mocks
@@ -252,6 +263,7 @@ npm run test:coverage
 ### Data Isolation (RLS)
 
 While unit tests don't directly test RLS policies, the tests verify:
+
 - ✅ user_id is added to all flashcard operations
 - ✅ Ownership verification exists
 - ✅ Services require user_id parameter
@@ -274,6 +286,7 @@ While unit tests don't directly test RLS policies, the tests verify:
 **Status:** ✅ HIGH Priority Unit Tests Complete
 
 The critical business logic of 10xCards is now covered by 61 unit tests, providing confidence in:
+
 - Data validation (flashcards, generations)
 - AI integration (OpenRouter service)
 - Database operations (flashcard CRUD)

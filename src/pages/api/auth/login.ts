@@ -13,10 +13,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     // Validate input
     if (!email || !password) {
-      return new Response(
-        JSON.stringify({ error: 'Email and password are required' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'Email and password are required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Attempt to sign in
@@ -26,10 +26,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     });
 
     if (error) {
-      return new Response(
-        JSON.stringify({ error: error.message }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     return new Response(
@@ -44,9 +44,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     );
   } catch (error) {
     console.error('Login error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Invalid request' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ error: 'Invalid request' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 };

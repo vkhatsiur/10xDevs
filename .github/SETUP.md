@@ -9,6 +9,7 @@ This document explains how to configure GitHub Actions workflows for CI/CD.
 Runs on every push and pull request to `main` and `develop` branches.
 
 **Checks performed:**
+
 - Code linting (ESLint)
 - Code formatting (Prettier)
 - Type checking (Astro check)
@@ -16,6 +17,7 @@ Runs on every push and pull request to `main` and `develop` branches.
 - Production build
 
 **Artifacts:**
+
 - Build output (`dist/`) - retained for 7 days
 
 ### 2. E2E Tests Workflow (`.github/workflows/e2e.yml`)
@@ -23,10 +25,12 @@ Runs on every push and pull request to `main` and `develop` branches.
 Runs on push/PR to `main` branch or manually via workflow_dispatch.
 
 **Checks performed:**
+
 - E2E tests with Playwright
 - Automated test data cleanup
 
 **Artifacts:**
+
 - Test reports - retained for 14 days
 - Test videos (on failure) - retained for 7 days
 
@@ -35,6 +39,7 @@ Runs on push/PR to `main` branch or manually via workflow_dispatch.
 To enable E2E tests, configure the following secrets in your GitHub repository:
 
 ### Navigation
+
 1. Go to your GitHub repository
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
@@ -43,33 +48,36 @@ To enable E2E tests, configure the following secrets in your GitHub repository:
 
 #### For CI Workflow (Optional - uses placeholders if not set)
 
-| Secret Name | Description | Example |
-|------------|-------------|---------|
-| `PUBLIC_SUPABASE_URL` | Supabase project URL | `https://your-project.supabase.co` |
-| `PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key | `eyJhbGciOiJIUzI1NiIsInR5cCI...` |
-| `OPENROUTER_API_KEY` | OpenRouter API key | `sk-or-v1-...` |
+| Secret Name                | Description              | Example                            |
+| -------------------------- | ------------------------ | ---------------------------------- |
+| `PUBLIC_SUPABASE_URL`      | Supabase project URL     | `https://your-project.supabase.co` |
+| `PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key | `eyJhbGciOiJIUzI1NiIsInR5cCI...`   |
+| `OPENROUTER_API_KEY`       | OpenRouter API key       | `sk-or-v1-...`                     |
 
 #### For E2E Tests (Required)
 
-| Secret Name | Description | Example Value |
-|------------|-------------|---------------|
-| `E2E_SUPABASE_URL` | Cloud Supabase URL for E2E tests | `https://mjrgjqlndutyqycwutco.supabase.co` |
-| `E2E_SUPABASE_ANON_KEY` | Cloud Supabase publishable key | `sb_publishable_...` |
-| `E2E_SUPABASE_SERVICE_KEY` | Cloud Supabase service role key | `sb_secret_...` |
-| `E2E_TEST_EMAIL` | Test user email | `e2e-test@10xcards.com` |
-| `E2E_TEST_PASSWORD` | Test user password | `TestPassword123!` |
-| `OPENROUTER_API_KEY` | OpenRouter API key | `sk-or-v1-...` |
+| Secret Name                | Description                      | Example Value                              |
+| -------------------------- | -------------------------------- | ------------------------------------------ |
+| `E2E_SUPABASE_URL`         | Cloud Supabase URL for E2E tests | `https://mjrgjqlndutyqycwutco.supabase.co` |
+| `E2E_SUPABASE_ANON_KEY`    | Cloud Supabase publishable key   | `sb_publishable_...`                       |
+| `E2E_SUPABASE_SERVICE_KEY` | Cloud Supabase service role key  | `sb_secret_...`                            |
+| `E2E_TEST_EMAIL`           | Test user email                  | `e2e-test@10xcards.com`                    |
+| `E2E_TEST_PASSWORD`        | Test user password               | `TestPassword123!`                         |
+| `OPENROUTER_API_KEY`       | OpenRouter API key               | `sk-or-v1-...`                             |
 
 ### Where to Find These Values
 
 **Cloud Supabase credentials** (for E2E tests):
+
 - From your `.env.test` file in the project root
 - Or from Supabase Dashboard → Project Settings → API
 
 **OpenRouter API key**:
+
 - From [OpenRouter Dashboard](https://openrouter.ai/keys)
 
 **Test user credentials**:
+
 - From your `.env.test` file
 - Email: `e2e-test@10xcards.com`
 - Password: `TestPassword123!`
@@ -110,6 +118,7 @@ cat .env.test
 **Problem**: E2E tests timeout or fail with authentication errors
 
 **Solution**:
+
 1. Verify all E2E secrets are configured correctly
 2. Check that test user exists in cloud Supabase
 3. Verify cloud Supabase database is migrated (see `supabase/cloud-migration.sql`)
@@ -119,6 +128,7 @@ cat .env.test
 **Problem**: Push to main doesn't trigger workflow
 
 **Solution**:
+
 1. Check that workflow file is in `.github/workflows/` directory
 2. Verify YAML syntax is valid
 3. Check branch name matches trigger configuration
@@ -186,6 +196,7 @@ Note: Local testing has limitations and may not perfectly match GitHub Actions e
 ## Support
 
 If workflows fail unexpectedly:
+
 1. Check workflow logs in GitHub Actions
 2. Verify all secrets are configured
 3. Test locally first: `npm run test` and `npm run test:e2e`

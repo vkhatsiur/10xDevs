@@ -55,9 +55,7 @@ export function FlashcardGenerator() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Create Flashcards</h1>
-        <p className="text-muted-foreground">
-          Generate flashcards with AI or create them manually
-        </p>
+        <p className="text-muted-foreground">Generate flashcards with AI or create them manually</p>
       </div>
 
       {/* Tabs */}
@@ -95,10 +93,7 @@ export function FlashcardGenerator() {
             </Button>
 
             {state.generationError && (
-              <ErrorDisplay
-                title="Generation Failed"
-                message={state.generationError}
-              />
+              <ErrorDisplay title="Generation Failed" message={state.generationError} />
             )}
           </div>
 
@@ -145,12 +140,7 @@ export function FlashcardGenerator() {
                 acceptedCount={stats.accepted}
               />
 
-              {state.saveError && (
-                <ErrorDisplay
-                  title="Save Failed"
-                  message={state.saveError}
-                />
-              )}
+              {state.saveError && <ErrorDisplay title="Save Failed" message={state.saveError} />}
             </div>
           )}
         </TabsContent>
