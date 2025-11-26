@@ -5,10 +5,11 @@ import { flashcardsCreateSchema } from '../../../lib/validators/flashcard.valida
 // Mark as server-rendered (required for POST endpoints in Astro)
 export const prerender = false;
 
-const flashcardService = new FlashcardService();
-
 // GET /api/flashcards - Get all flashcards for a user
 export const GET: APIRoute = async ({ locals }) => {
+  // Get service role key from runtime env (Cloudflare Pages)
+  const serviceRoleKey = locals.runtime?.env?.SUPABASE_SERVICE_ROLE_KEY;
+  const flashcardService = new FlashcardService(serviceRoleKey);
   try {
     // Check authentication
     if (!locals.user) {
@@ -45,6 +46,9 @@ export const GET: APIRoute = async ({ locals }) => {
 
 // POST /api/flashcards - Create one or more flashcards
 export const POST: APIRoute = async ({ request, locals }) => {
+  // Get service role key from runtime env (Cloudflare Pages)
+  const serviceRoleKey = locals.runtime?.env?.SUPABASE_SERVICE_ROLE_KEY;
+  const flashcardService = new FlashcardService(serviceRoleKey);
   try {
     // Check authentication
     if (!locals.user) {

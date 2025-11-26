@@ -5,12 +5,13 @@ import { generateFlashcardsSchema } from '../../../lib/validators/generation.val
 // Mark as server-rendered (required for POST endpoints in Astro)
 export const prerender = false;
 
-const generationService = new GenerationService();
-
 // POST /api/generations - Generate flashcard proposals from source text
 // IMPORTANT: This endpoint returns proposals WITHOUT saving them to flashcards table
 // Users must accept proposals and save them via POST /api/flashcards
 export const POST: APIRoute = async ({ request, locals }) => {
+  const serviceRoleKey = locals.runtime?.env?.SUPABASE_SERVICE_ROLE_KEY;
+  const openRouterApiKey = locals.runtime?.env?.OPENROUTER_API_KEY;
+  const generationService = new GenerationService(serviceRoleKey, openRouterApiKey);
   try {
     // Check authentication
     if (!locals.user) {

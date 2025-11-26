@@ -13,15 +13,17 @@ export interface GenerationResult {
 }
 
 export class GenerationService {
-  private supabase = getServiceSupabase();
+  private supabase;
   private openRouterService: OpenRouterService;
   // Using GPT-4.1 Mini model
   private model = 'openai/gpt-4.1-mini';
 
-  constructor() {
-    // Pass model to OpenRouter service
+  constructor(serviceRoleKey?: string, openRouterApiKey?: string) {
+    this.supabase = getServiceSupabase(serviceRoleKey);
+    // Pass model and API key to OpenRouter service
     this.openRouterService = new OpenRouterService({
       model: this.model,
+      apiKey: openRouterApiKey,
     });
   }
 

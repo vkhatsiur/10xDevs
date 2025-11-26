@@ -2,7 +2,11 @@ import { getServiceSupabase } from '../supabase';
 import type { TablesInsert, Tables } from '../../db/types';
 
 export class FlashcardService {
-  private supabase = getServiceSupabase();
+  private supabase;
+
+  constructor(serviceRoleKey?: string) {
+    this.supabase = getServiceSupabase(serviceRoleKey);
+  }
 
   /**
    * Create multiple flashcards (batch operation)

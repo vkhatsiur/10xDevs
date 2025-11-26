@@ -14,14 +14,15 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 // Server-side Supabase client (uses service role key)
 // Use this only in API routes or server-side code
-export function getServiceSupabase() {
-  const serviceRoleKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+export function getServiceSupabase(serviceRoleKey?: string) {
+  // Try to get from parameter first (passed from runtime.env), then fallback to import.meta.env
+  const key = serviceRoleKey || import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!serviceRoleKey) {
+  if (!key) {
     throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
   }
 
-  return createClient<Database>(supabaseUrl, serviceRoleKey, {
+  return createClient<Database>(supabaseUrl, key, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,

@@ -8,10 +8,10 @@ import { FlashcardService } from '../../../lib/services/flashcard.service';
 
 export const prerender = false;
 
-const flashcardService = new FlashcardService();
-
 // PUT /api/flashcards/:id - Update a flashcard
 export const PUT: APIRoute = async ({ params, request, locals }) => {
+  const serviceRoleKey = locals.runtime?.env?.SUPABASE_SERVICE_ROLE_KEY;
+  const flashcardService = new FlashcardService(serviceRoleKey);
   try {
     // Check authentication
     if (!locals.user) {
@@ -86,6 +86,8 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
 
 // DELETE /api/flashcards/:id - Delete a flashcard
 export const DELETE: APIRoute = async ({ params, locals }) => {
+  const serviceRoleKey = locals.runtime?.env?.SUPABASE_SERVICE_ROLE_KEY;
+  const flashcardService = new FlashcardService(serviceRoleKey);
   try {
     // Check authentication
     if (!locals.user) {
