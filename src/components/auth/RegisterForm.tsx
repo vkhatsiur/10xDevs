@@ -62,7 +62,7 @@ export function RegisterForm() {
         // If no confirmation needed, redirect immediately to generate page
         window.location.href = '/generate';
       }
-    } catch (err) {
+    } catch (_err) {
       setError('An unexpected error occurred');
       setIsLoading(false);
     }

@@ -5,12 +5,12 @@
 import { test, expect, testData } from './fixtures';
 
 test.describe('Manual Flashcard Creation', () => {
-  test.beforeEach(async ({ authenticatedPage, flashcardsPage }) => {
+  test.beforeEach(async ({ flashcardsPage }) => {
     await flashcardsPage.goto();
     await flashcardsPage.clearAllFlashcards();
   });
 
-  test('should create a single manual flashcard', async ({ authenticatedPage, generatePage, flashcardsPage }) => {
+  test('should create a single manual flashcard', async ({ generatePage, flashcardsPage }) => {
     await generatePage.goto();
 
     // Create single flashcard
@@ -26,7 +26,7 @@ test.describe('Manual Flashcard Creation', () => {
     await flashcardsPage.expectFlashcardsVisible(1);
   });
 
-  test('should create multiple manual flashcards', async ({ authenticatedPage, generatePage, flashcardsPage }) => {
+  test('should create multiple manual flashcards', async ({ generatePage, flashcardsPage }) => {
     await generatePage.goto();
 
     // Create multiple flashcards
@@ -39,7 +39,7 @@ test.describe('Manual Flashcard Creation', () => {
     await flashcardsPage.expectFlashcardsVisible(testData.flashcards.length);
   });
 
-  test('should edit an existing flashcard', async ({ authenticatedPage, generatePage, flashcardsPage }) => {
+  test('should edit an existing flashcard', async ({ generatePage, flashcardsPage }) => {
     // First, create a flashcard
     await generatePage.goto();
     await generatePage.createSingleFlashcard('Original Front', 'Original Back');
@@ -85,7 +85,7 @@ test.describe('Manual Flashcard Creation', () => {
     await flashcardsPage.expectSuccessToast();
   });
 
-  test('should search flashcards', async ({ authenticatedPage, generatePage, flashcardsPage }) => {
+  test('should search flashcards', async ({ generatePage, flashcardsPage }) => {
     // Create flashcards with distinct content
     await generatePage.goto();
     await generatePage.createMultipleFlashcards([

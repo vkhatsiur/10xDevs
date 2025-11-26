@@ -39,7 +39,7 @@ export function LoginForm() {
 
       // Redirect to generate page on success
       window.location.href = '/generate';
-    } catch (err) {
+    } catch (_err) {
       setError('An unexpected error occurred');
       setIsLoading(false);
     }

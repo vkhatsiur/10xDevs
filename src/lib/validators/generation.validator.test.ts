@@ -127,7 +127,7 @@ describe('Generation Validator', () => {
         { length: 10001, shouldPass: false, description: 'Above maximum' },
       ];
 
-      tests.forEach(({ length, shouldPass, description }) => {
+      tests.forEach(({ length, shouldPass }) => {
         const input = { source_text: 'a'.repeat(length) };
         const result = generateFlashcardsSchema.safeParse(input);
         expect(result.success).toBe(shouldPass);
