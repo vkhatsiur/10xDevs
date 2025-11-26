@@ -36,7 +36,7 @@ describe('OpenRouterService', () => {
       const config = defaultService.getConfig();
 
       expect(config.apiUrl).toBe('https://openrouter.ai/api/v1/chat/completions');
-      expect(config.model).toBe('openai/gpt-4o-mini');
+      expect(config.model).toBe('openai/gpt-4.1-mini');
       expect(config.timeout).toBe(60000);
       expect(config.maxRetries).toBe(2);
     });
