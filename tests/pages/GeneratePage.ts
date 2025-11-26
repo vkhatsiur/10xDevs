@@ -21,6 +21,21 @@ export class GeneratePage {
     await this.page.goto('/generate');
   }
 
+  async switchToManualTab() {
+    const manualTab = this.page.getByRole('tab', { name: /manual creation/i });
+
+    await expect(manualTab).toBeVisible({ timeout: 10_000 });
+
+    await this.page.waitForTimeout(2000);
+    await manualTab.click();    
+    await expect(manualTab).toHaveAttribute('data-state', 'active', {
+      timeout: 10_000,
+    });
+
+    await expect(this.manualForm).toBeVisible({ timeout: 10_000 });
+  }
+
+
   async fillFlashcard(index: number, front: string, back: string) {
     const frontInput = this.page.getByTestId(`flashcard-front-${index}`);
     const backInput = this.page.getByTestId(`flashcard-back-${index}`);
@@ -59,12 +74,15 @@ export class GeneratePage {
   }
 
   async createSingleFlashcard(front: string, back: string) {
+    await this.switchToManualTab();
     await this.fillFlashcard(0, front, back);
     await this.saveFlashcards();
     await this.expectSuccessToast();
   }
 
   async createMultipleFlashcards(flashcards: Array<{ front: string; back: string }>) {
+    await this.switchToManualTab();
+
     // Fill first card
     await this.fillFlashcard(0, flashcards[0].front, flashcards[0].back);
 

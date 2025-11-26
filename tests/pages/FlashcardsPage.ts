@@ -34,7 +34,7 @@ export class FlashcardsPage {
   }
 
   async goto() {
-    await this.page.goto('/my-flashcards');
+    await this.page.goto('/flashcards');
   }
 
   async searchFlashcards(query: string) {
@@ -98,5 +98,25 @@ export class FlashcardsPage {
   async expectNoSearchResults() {
     const noResults = this.page.getByTestId('no-search-results');
     await expect(noResults).toBeVisible();
+  }
+
+  async clearAllFlashcards() {
+    if (await this.emptyState.isVisible().catch(() => false)) {
+      return;
+    }
+
+    await this.page.waitForTimeout(400);
+    const deleteButtons = this.page.getByTestId(/delete-flashcard-/);
+
+    while ((await deleteButtons.count()) > 0) {
+      this.page.once('dialog', (dialog) => dialog.accept());
+
+      await this.page.waitForTimeout(400);
+      await deleteButtons.first().click();
+      await this.expectSuccessToast().catch(() => {});
+      await this.page.waitForTimeout(400);
+    }
+    
+    await expect(deleteButtons).toHaveCount(0);
   }
 }

@@ -5,8 +5,10 @@
 import { test, expect, testData } from './fixtures';
 
 test.describe('Manual Flashcard Creation', () => {
-  // Use authenticated page for all tests
-  test.use({ storageState: { cookies: [], origins: [] } });
+  test.beforeEach(async ({ authenticatedPage, flashcardsPage }) => {
+    await flashcardsPage.goto();
+    await flashcardsPage.clearAllFlashcards();
+  });
 
   test('should create a single manual flashcard', async ({ authenticatedPage, generatePage, flashcardsPage }) => {
     await generatePage.goto();

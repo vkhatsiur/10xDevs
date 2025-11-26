@@ -1,5 +1,0 @@
-TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. It was developed and is maintained by Microsoft. TypeScript adds optional static typing to JavaScript, which can help catch errors early through a type system and makes JavaScript development more efficient.
-
-Key features of TypeScript include static type checking, class-based object-oriented programming, and compilation of TypeScript code to clean, simple JavaScript code that runs on any browser, in Node.js, or in any JavaScript engine that supports ECMAScript 3 or newer. TypeScript supports definition files that can contain type information of existing JavaScript libraries, much like C++ header files can describe the structure of existing object files.
-
-TypeScript is designed for development of large applications and transcompiles to JavaScript. As TypeScript is a superset of JavaScript, existing JavaScript programs are also valid TypeScript programs. TypeScript may be used to develop JavaScript applications for both client-side and server-side execution. The TypeScript compiler is itself written in TypeScript and compiled to JavaScript.
